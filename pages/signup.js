@@ -1,6 +1,22 @@
-import React from "react";
+import React, { useState } from "react";
 import Link from "next/link";
+import { RegisterApi } from "@/service/auth";
+import { toast } from "react-toastify";
 const Signup = () => {
+  const [name, setName] = useState("");
+  const [password, setPassword] = useState("");
+  const [email, setEmail] = useState("");
+
+  const SignupSubmit = async (e) => {
+    e.preventDefault();
+    const response = await RegisterApi(email, password, name);
+    console.log(response, "responseresponse");
+    if (response.success) {
+      toast.success(response.message);
+    } else {
+      toast.error(response.message);
+    }
+  };
   return (
     <section className="bg-white">
       <div className="lg:grid lg:min-h-screen lg:grid-cols-12">
@@ -31,7 +47,10 @@ const Signup = () => {
                 Eligendi nam dolorum aliquam, quibusdam aperiam voluptatum.
               </p>
             </div>
-            <form action="#" className="mt-8 grid grid-cols-6 gap-6">
+            <form
+              onSubmit={SignupSubmit}
+              className="mt-8 grid grid-cols-6 gap-6"
+            >
               <div className="col-span-6">
                 <label
                   htmlFor="FirstName"
@@ -43,6 +62,10 @@ const Signup = () => {
                   type="text"
                   id="Name"
                   name="name"
+                  value={name}
+                  onChange={(e) => {
+                    setName(e.target.value);
+                  }}
                   className="mt-1 w-full rounded-md border-gray-200 bg-white text-sm text-gray-700 shadow-sm"
                 />
               </div>
@@ -58,6 +81,10 @@ const Signup = () => {
                   type="email"
                   id="Email"
                   name="email"
+                  value={email}
+                  onChange={(e) => {
+                    setEmail(e.target.value);
+                  }}
                   className="mt-1 w-full rounded-md border-gray-200 bg-white text-sm text-gray-700 shadow-sm"
                 />
               </div>
@@ -71,6 +98,10 @@ const Signup = () => {
                 <input
                   type="password"
                   id="Password"
+                  value={password}
+                  onChange={(e) => {
+                    setPassword(e.target.value);
+                  }}
                   name="password"
                   className="mt-1 w-full rounded-md border-gray-200 bg-white text-sm text-gray-700 shadow-sm"
                 />
