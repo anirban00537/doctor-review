@@ -1,9 +1,29 @@
+import { getProfile } from "@/service/user";
 import React, { useState, useEffect, useRef } from "react";
-
+import Cookies from "js-cookie";
+import { useDispatch, useSelector } from "react-redux";
+import { clearUser, setUser } from "@/store/slice/user.slice";
+import { useRouter } from "next/router";
 const Layout = ({ children }) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const menuRef = useRef(null);
+  const { isLoggedIn } = useSelector((state) => state.userInfo);
 
+  const menuRef = useRef(null);
+  const dispatch = useDispatch();
+  const router = useRouter();
+  const getProfileData = async () => {
+    const response = await getProfile();
+    dispatch(setUser(response.data));
+  };
+  const makeLogout = async () => {
+    dispatch(clearUser());
+    Cookies.remove("token");
+    router.push("/");
+  };
+  useEffect(() => {
+    const token = Cookies.get("token");
+    token && getProfileData();
+  }, []);
   useEffect(() => {
     const handleOutsideClick = (event) => {
       if (menuRef.current && !menuRef.current.contains(event.target)) {
@@ -23,7 +43,7 @@ const Layout = ({ children }) => {
   };
   return (
     <div className="min-h-full">
-      <nav className="bg-gray-800">
+      <nav className="bg-gray-800 py-3">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="flex h-16 items-center justify-between">
             <div className="flex items-center">
@@ -98,6 +118,7 @@ const Layout = ({ children }) => {
                         role="menuitem"
                         tabIndex={-1}
                         id="user-menu-item-2"
+                        onClick={makeLogout}
                       >
                         Sign out
                       </a>

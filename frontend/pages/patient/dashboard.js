@@ -1,7 +1,18 @@
 import Layout from "@/layout";
-import React from "react";
+import { getUserAppointments } from "@/service/user";
+import { SSRAuthCheck } from "@/utils/ssr";
+import React, { useEffect } from "react";
+import { useSelector } from "react-redux";
 
 const Dashboard = () => {
+  const { isLoggedIn } = useSelector((state) => state.userInfo);
+  const getAppointments = async () => {
+    const response = await getUserAppointments();
+    console.log(response, "response");
+  };
+  useEffect(() => {
+    isLoggedIn && getAppointments();
+  }, [isLoggedIn]);
   return (
     <Layout>
       <div className="relative overflow-x-auto shadow-md sm:rounded-lg">
@@ -151,7 +162,6 @@ const Dashboard = () => {
                 scope="row"
                 className="flex items-center px-6 py-4 text-gray-900 whitespace-nowrap dark:text-white"
               >
-                
                 <div className="pl-3">
                   <div className="text-base font-semibold">Neil Sims</div>
                   <div className="font-normal text-gray-500">
@@ -192,7 +202,6 @@ const Dashboard = () => {
                 scope="row"
                 className="flex items-center px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white"
               >
-              
                 <div className="pl-3">
                   <div className="text-base font-semibold">Bonnie Green</div>
                   <div className="font-normal text-gray-500">
@@ -344,5 +353,11 @@ const Dashboard = () => {
     </Layout>
   );
 };
+export const getServerSideProps = async (ctx) => {
+  await SSRAuthCheck(ctx, "/ico/applied-launchpad");
 
+  return {
+    props: {},
+  };
+};
 export default Dashboard;
