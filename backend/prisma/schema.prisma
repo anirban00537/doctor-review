@@ -1,0 +1,106 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id                  Int           @id @default(autoincrement())
+  email               String        @unique
+  name                String?
+  photo_url           String?
+  password            String
+  role                Role          @default(USER)
+  isEmailVerified     Boolean       @default(false)
+  createdAt           DateTime      @default(now())
+  updatedAt           DateTime      @updatedAt
+  Token               Token[]
+  Review              Review[] // Added relationship to reviews
+  user_appointments   Appointment[] @relation("User")
+  doctor_appointments Appointment[] @relation("Doctor")
+
+  // One-to-one relation with DoctorProfile
+  doctorProfile   DoctorProfile?
+  doctorsServices DoctorsService[] // Added relationship to doctors services
+}
+
+model DoctorProfile {
+  id              Int      @id @default(autoincrement())
+  specialization  String?
+  qualification   String?
+  experienceYears Int?
+  clinicAddress   String?
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  // One-to-one relation with User
+  user   User @relation(fields: [userId], references: [id])
+  userId Int  @unique
+}
+
+model DoctorsService {
+  id         Int           @id @default(autoincrement())
+  name       String // Name of the doctor's service
+  price      Float // Price of the service
+  createdAt  DateTime      @default(now())
+  updatedAt  DateTime      @updatedAt
+  doctor     User          @relation(fields: [doctorId], references: [id])
+  doctorId   Int
+  apoinments Appointment[]
+}
+
+model Token {
+  id          Int       @id @default(autoincrement())
+  token       String
+  type        TokenType
+  expires     DateTime
+  blacklisted Boolean
+  createdAt   DateTime  @default(now())
+  user        User?     @relation(fields: [userId], references: [id])
+  userId      Int?
+}
+
+model Review {
+  id        Int      @id @default(autoincrement())
+  rating    Int // Rating of the doctor (e.g., from 1 to 5)
+  comment   String? // Optional user comment about the doctor
+  createdAt DateTime @default(now())
+  user      User?    @relation(fields: [userId], references: [id])
+  userId    Int?
+}
+
+model Appointment {
+  id               Int               @id @default(autoincrement())
+  date             DateTime // Date and time of the appointment
+  reason           String? // Reason for the appointment (optional)
+  status           AppointmentStatus @default(SCHEDULED) // Status of the appointment
+  createdAt        DateTime          @default(now())
+  user             User?             @relation("User", fields: [userId], references: [id])
+  doctor           User?             @relation("Doctor", fields: [doctorId], references: [id])
+  userId           Int?
+  doctorId         Int?
+  DoctorsService   DoctorsService?   @relation(fields: [doctorsServiceId], references: [id])
+  doctorsServiceId Int?
+}
+
+enum Role {
+  USER
+  ADMIN
+  DOCTOR
+}
+
+enum TokenType {
+  ACCESS
+  REFRESH
+  RESET_PASSWORD
+  VERIFY_EMAIL
+}
+
+enum AppointmentStatus {
+  SCHEDULED
+  CANCELLED
+  COMPLETED
+}
