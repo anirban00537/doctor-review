@@ -1,16 +1,17 @@
 import { parseCookies } from "nookies";
 
-export const SSRAuthCheck = async (ctx, redirect) => {
+export const SSRAuthCheck = async (ctx) => {
   try {
     const cookies = parseCookies(ctx);
-    ctx.token = cookies.token;
-    ctx.res.writeHead(302, {
-      Location: "/signin" + "?redirect=" + redirect,
-    });
-    ctx.res.end();
-
-    return false;
-  } catch (error) {
-      
-  }
+    console.log(cookies.token, "cookies.token;");
+    cookies.token;
+    if (!cookies.token) {
+      ctx.res.writeHead(302, {
+        Location: "/login",
+      });
+      ctx.res.end();
+      return false;
+    }
+    return true;
+  } catch (error) {}
 };

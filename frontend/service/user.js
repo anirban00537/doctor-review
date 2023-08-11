@@ -1,7 +1,9 @@
 import request from "@/utils/request";
 
-export const getUserAppointments = async () => {
-  const { data } = await request.get("/user/get-user-apoinments");
+export const getUserAppointments = async (page, limit) => {
+  const { data } = await request.get(
+    `/user/get-user-apoinments?page=${page}&limit=${limit}`
+  );
   return data;
 };
 

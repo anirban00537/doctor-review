@@ -32,6 +32,7 @@ const editUser = catchAsync(async (req: Request, res: Response) => {
 });
 const getUserApoinments = catchAsync(async (req: Request, res: Response) => {
   try {
+    const { page, limit } = req.query;
     const token = separateToken(req.headers.authorization);
     if (!token) {
       return errorResponse(res, 'Authorization header missing or invalid format', null);
@@ -41,9 +42,13 @@ const getUserApoinments = catchAsync(async (req: Request, res: Response) => {
     if (!user) {
       return errorResponse(res, 'User not found', null);
     }
-    const appointments = await userService.getApoinments(userID);
+    const response: any = await userService.getApoinments(
+      userID,
+      Number(page),
+      Number(limit)
+    );
 
-    return successResponse(res, 'User appointments retrieved successfully', appointments);
+    return successResponse(res, 'User appointments retrieved successfully', response);
   } catch (error) {
     return processException(res, error);
   }

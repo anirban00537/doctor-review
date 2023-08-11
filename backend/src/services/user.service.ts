@@ -10,7 +10,6 @@ const createUser = async (
   name?: string,
   role: Role = Role.USER
 ): Promise<User> => {
-  
   return prisma.user.create({
     data: {
       email,
@@ -89,15 +88,44 @@ const getUserById = async <Key extends keyof User>(
     select: keys.reduce((obj, k) => ({ ...obj, [k]: true }), {})
   }) as Promise<Pick<User, Key> | null>;
 };
-const getApoinments = async (user_id: number): Promise<Appointment[] | null> => {
-  return prisma.appointment.findMany({
+const getApoinments = async (
+  user_id: number,
+  page: number = 1,
+  limit: number = 10
+): Promise<{
+  appointments: Appointment[];
+  totalCount: number;
+  totalPages: number;
+  currentPage: number;
+} | null> => {
+  const skip = (page - 1) * limit;
+
+  const appointments = await prisma.appointment.findMany({
     where: {
       userId: user_id
     },
     include: {
-      doctor: true
+      doctor: {
+        select: {
+          email: true,
+          name: true,
+          photo_url: true,
+          doctorProfile: true
+        }
+      }
+    },
+    skip,
+    take: limit
+  });
+
+  const totalCount = await prisma.appointment.count({
+    where: {
+      userId: user_id
     }
   });
+  const totalPages = Math.ceil(totalCount / limit);
+
+  return { appointments, totalCount, totalPages, currentPage: page };
 };
 
 const createAppointment = async (
