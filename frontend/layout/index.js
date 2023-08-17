@@ -46,14 +46,14 @@ const Layout = ({ children, name = "Dashboard" }) => {
   return (
     <div className="min-h-full">
       {isLoggedIn ? (
-        <nav className="bg-gray-800 py-3">
+        <nav className="bg-gray-100 py-3">
           <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
             <div className="flex h-16 items-center justify-between">
               <div className="flex items-center">
                 <div className="flex-shrink-0">
                   <img
-                    className="h-8 w-8"
-                    src="https://tailwindui.com/img/logos/mark.svg?color=indigo&shade=500"
+                    className="h-10 w-16"
+                    src="https://www.creativefabrica.com/wp-content/uploads/2022/03/28/medical-flat-icon-heart-Graphics-27993885-1.png"
                     alt="Your Company"
                   />
                 </div>
@@ -62,14 +62,14 @@ const Layout = ({ children, name = "Dashboard" }) => {
                     {/* Current: "bg-gray-900 text-white", Default: "text-gray-300 hover:bg-gray-700 hover:text-white" */}
                     <a
                       href="#"
-                      className="bg-gray-900 text-white rounded-md px-3 py-2 text-sm font-medium"
+                      className="bg-gray-200 text-black rounded-md px-3 py-2 ml-2 text-sm font-medium"
                       aria-current="page"
                     >
                       Dashboard
                     </a>
                     <Link
                       href="/services"
-                      className="text-gray-300 hover:bg-gray-700 hover:text-white rounded-md px-3 py-2 text-sm font-medium"
+                      className="text-black hover:bg-gray-700 hover:text-white rounded-md px-3 py-2 text-sm font-medium"
                     >
                       Find Services
                     </Link>
@@ -242,9 +242,9 @@ const Layout = ({ children, name = "Dashboard" }) => {
         <Navbar />
       )}
       {isLoggedIn && (
-        <header className="bg-white shadow">
+        <header className="bg-green-500 shadow">
           <div className="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8">
-            <h1 className="text-3xl font-bold tracking-tight text-gray-900">
+            <h1 className="text-3xl font-bold tracking-tight text-gray-100">
               {name}
             </h1>
           </div>

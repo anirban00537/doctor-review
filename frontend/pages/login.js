@@ -13,7 +13,7 @@ const login = () => {
   const loginSubmit = async (e) => {
     e.preventDefault();
     const response = await loginApi(email, password);
-    console.log(response, "responseresponse");
+    console.log(response, "response");
     if (response.success) {
       toast.success(response.message);
       Cookie.set("token", response?.data?.tokens?.access?.token);

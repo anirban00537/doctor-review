@@ -1,33 +1,35 @@
 import Link from "next/link";
 
-const DoctorCard = ({
-  serviceName,
-  doctorName,
-  description,
-  speciality,
-  doctor_img,
-  servicePrice,
-}) => {
+const DoctorCard = ({ details }) => {
+  console.log(details, "details");
   return (
     <Link
       href="/service-details"
-      className="group relative bg-gradient-to-b from-green-500 to-purple-500 hover:from-green-600 hover:to-purple-600 rounded-lg p-4 shadow-md flex items-center"
+      className="group relative rounded-lg p-4 shadow-md flex items-start"
     >
-      <div className="w-1/8 h-20 mr-4">
-        <img
-          src={doctor_img ? doctor_img : "https://via.placeholder.com/80"}
-          alt="Doctor"
-          className="rounded-full object-cover h-20 w-20"
-        />
-      </div>
-      <div className="flex-grow">
-        <p className="text-xs font-medium uppercase text-white">{speciality}</p>
-        <p className="text-lg font-semibold mb-1 text-white">{serviceName}</p>
-        <p className="text-xs font-medium uppercase text-white">{doctorName}</p>
-        <div className="text-white">
-          <p className="text-xs mb-1">{description}</p>
-          <p className="text-sm font-semibold">Price: {servicePrice}</p>
+      <div className="flex-grow text-gray-700 text-center">
+        <div className="w-full mb-2">
+          <div className=" border-green-500 border-4 rounded-full overflow-hidden w-20 h-20 mx-auto mb-2">
+            <img
+              src={"https://via.placeholder.com/80"}
+              alt="Doctor"
+              className="object-cover w-full h-full"
+            />
+          </div>
         </div>
+        <p className="text-xs font-medium uppercase">
+          {details?.doctor?.doctorProfile?.specialization}
+        </p>
+        <p className="text-lg font-semibold mb-1">{details?.name}</p>
+        <p className="text-xs font-medium uppercase">{details?.doctor?.name}</p>
+        <div className="mb-2">
+          <p className="text-xs">{details.description}</p>
+          <p className="text-sm font-semibold">Price: {details.price}</p>
+        </div>
+        {/* Add the button for adding appointment to the right */}
+        <button className="bg-green-500 hover:bg-green-600 text-white font-semibold py-2 px-4 rounded">
+          Add Appointment
+        </button>
       </div>
     </Link>
   );

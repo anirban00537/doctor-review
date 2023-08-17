@@ -10,7 +10,6 @@ const Signup = () => {
   const SignupSubmit = async (e) => {
     e.preventDefault();
     const response = await RegisterApi(email, password, name);
-    console.log(response, "responseresponse");
     if (response.success) {
       toast.success(response.message);
     } else {
