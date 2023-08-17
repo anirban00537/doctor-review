@@ -4,30 +4,29 @@ const DoctorCard = ({
   serviceName,
   doctorName,
   description,
-  url,
   speciality,
+  doctor_img,
+  servicePrice,
 }) => {
   return (
-    <Link href="/service-details" className="group relative rounded-lg block bg-black">
-      <img
-        alt="Developer"
-        src={url}
-        className="absolute inset-0 h-full w-full object-cover opacity-75 transition-opacity group-hover:opacity-50"
-      />
-      <div className="relative p-4 sm:p-6 lg:p-8">
-        <p className="text-sm font-medium uppercase tracking-widest text-pink-500">
-          {speciality}
-        </p>
-        <p className="text-xl font-bold text-white sm:text-2xl">
-          {serviceName}
-        </p>
-        <p className="text-sm font-medium uppercase tracking-widest text-white">
-          {doctorName}
-        </p>
-        <div className="mt-32 sm:mt-48 lg:mt-64">
-          <div className="translate-y-8 transform opacity-0 transition-all group-hover:translate-y-0 group-hover:opacity-100">
-            <p className="text-sm text-white">{description}</p>
-          </div>
+    <Link
+      href="/service-details"
+      className="group relative bg-gradient-to-b from-green-500 to-purple-500 hover:from-green-600 hover:to-purple-600 rounded-lg p-4 shadow-md flex items-center"
+    >
+      <div className="w-1/8 h-20 mr-4">
+        <img
+          src={doctor_img ? doctor_img : "https://via.placeholder.com/80"}
+          alt="Doctor"
+          className="rounded-full object-cover h-20 w-20"
+        />
+      </div>
+      <div className="flex-grow">
+        <p className="text-xs font-medium uppercase text-white">{speciality}</p>
+        <p className="text-lg font-semibold mb-1 text-white">{serviceName}</p>
+        <p className="text-xs font-medium uppercase text-white">{doctorName}</p>
+        <div className="text-white">
+          <p className="text-xs mb-1">{description}</p>
+          <p className="text-sm font-semibold">Price: {servicePrice}</p>
         </div>
       </div>
     </Link>
