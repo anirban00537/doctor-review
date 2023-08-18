@@ -1,17 +1,17 @@
 import Link from "next/link";
+import AddAppointments from "./add-appoinment";
 
 const DoctorCard = ({ details }) => {
-  console.log(details, "details");
+
   return (
-    <Link
-      href="/service-details"
-      className="group relative rounded-lg p-4 shadow-md flex items-start"
-    >
+    <div className="group relative rounded-lg p-4 shadow-md flex items-start">
       <div className="flex-grow text-gray-700 text-center">
         <div className="w-full mb-2">
           <div className=" border-green-500 border-4 rounded-full overflow-hidden w-20 h-20 mx-auto mb-2">
             <img
-              src={"https://via.placeholder.com/80"}
+              src={
+                details?.doctor?.photo_url ?? "https://via.placeholder.com/80"
+              }
               alt="Doctor"
               className="object-cover w-full h-full"
             />
@@ -27,11 +27,16 @@ const DoctorCard = ({ details }) => {
           <p className="text-sm font-semibold">Price: {details.price}</p>
         </div>
         {/* Add the button for adding appointment to the right */}
-        <button className="bg-green-500 hover:bg-green-600 text-white font-semibold py-2 px-4 rounded">
-          Add Appointment
-        </button>
+        <div className="flex items-center justify-center gap-1">
+          <Link href="/service-details">
+            <button className="bg-green-500 text-sm hover:bg-green-600 text-white font-semibold py-2 px-4 rounded">
+              Details
+            </button>
+          </Link>
+          <AddAppointments details={details} />
+        </div>
       </div>
-    </Link>
+    </div>
   );
 };
 

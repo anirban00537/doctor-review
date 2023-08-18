@@ -49,6 +49,7 @@ const getAllServiceList = async (): Promise<DoctorsService[] | null> => {
           email: true,
           photo_url: true,
           Review: true,
+          id: true,
           doctorProfile: {
             select: {
               clinicAddress: true,
