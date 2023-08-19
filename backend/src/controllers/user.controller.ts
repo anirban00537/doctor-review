@@ -6,6 +6,7 @@ import { separateToken, successResponse, errorResponse, processException } from 
 import { Appointment, User } from '@prisma/client';
 import { DOCTOR } from '../utils/core-constants';
 import { getDoctorProfileById } from '../services/doctors.service';
+import prisma from '../client';
 
 const createUser = catchAsync(async (req, res) => {
   const { email, password, name, role } = req.body;
@@ -42,11 +43,7 @@ const getUserApoinments = catchAsync(async (req: Request, res: Response) => {
     if (!user) {
       return errorResponse(res, 'User not found', null);
     }
-    const response: any = await userService.getApoinments(
-      userID,
-      Number(page),
-      Number(limit)
-    );
+    const response: any = await userService.getApoinments(userID, Number(page), Number(limit));
 
     return successResponse(res, 'User appointments retrieved successfully', response);
   } catch (error) {
@@ -103,8 +100,12 @@ const addPhotoUrl = catchAsync(async (req: Request, res: Response) => {
     }
 
     user.photo_url = req.file.path;
-    const updatedProfile = await userService.updateUserById(userID, { photo_url: user.photo_url });
-
+    let updatedProfile: any = await userService.updateUserById(userID, {
+      photo_url: req.file.path
+    });
+    console.log(user.photo_url, 'ssssssssssssssssssssss');
+    let profileData = `localhost/3000/image/${updatedProfile.photo_url.split('/')[2]}`;
+    updatedProfile.photo_url = profileData;
     return successResponse(res, 'Profile photo added successfully', updatedProfile);
   } catch (error) {
     return errorResponse(res, 'Failed to update photo URL', null);
@@ -153,7 +154,20 @@ const getUser = catchAsync(async (req, res) => {
     return errorResponse(res, '', null);
   }
 });
-
+const getServiceById = catchAsync(async (req, res) => {
+  try {
+    const { serviceId } = req.params;
+    console.log(serviceId, 'serviceId');
+    const service = await userService.getServiceByIdService(Number(serviceId));
+    console.log(service, 'service');
+    if (!service) {
+      return errorResponse(res, 'Invalid service id', null);
+    }
+    return successResponse(res, 'User retrieved successfully', service);
+  } catch (error) {
+    return errorResponse(res, String(error), null);
+  }
+});
 const updateUser = catchAsync(async (req, res) => {
   try {
     const user = await userService.updateUserById(req.params.userId, req.body);
@@ -178,5 +192,6 @@ export default {
   addPhotoUrl,
   editUser,
   getUserApoinments,
-  createAppointment
+  createAppointment,
+  getServiceById
 };

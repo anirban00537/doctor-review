@@ -1,6 +1,7 @@
 import { addAppointment } from "@/service/user";
 import { Button, Modal } from "flowbite-react";
 import Link from "next/link";
+import { useRouter } from "next/router";
 import { useState } from "react";
 import { useSelector } from "react-redux";
 import { toast } from "react-toastify";
@@ -11,7 +12,7 @@ export default function AddAppointments({ details }) {
   const [date, setDate] = useState();
   const [reason, setReason] = useState();
   const { isLoggedIn } = useSelector((state) => state.userInfo);
-
+  const router = useRouter();
   const addUserAppointment = async () => {
     const response = await addAppointment(
       details?.doctorId,
@@ -21,6 +22,7 @@ export default function AddAppointments({ details }) {
     );
     if (response.success) {
       toast.success(response.message);
+      router.push("/patient/dashboard")
     } else {
       toast.error(response.message);
     }
@@ -36,9 +38,7 @@ export default function AddAppointments({ details }) {
         </button>
       ) : (
         <Link href={"/login"}>
-          <button
-            className="bg-green-500 text-sm hover:bg-green-600 text-white font-semibold py-2 px-4 rounded"
-          >
+          <button className="bg-green-500 text-sm hover:bg-green-600 text-white font-semibold py-2 px-4 rounded">
             Add Appointment
           </button>
         </Link>

@@ -6,7 +6,11 @@ export const getUserAppointments = async (page, limit) => {
   );
   return data;
 };
-
+// user/service-details/6
+export const getServiceDetails = async (serviceId) => {
+  const { data } = await request.get(`/user/service-details/${serviceId}`);
+  return data;
+};
 export const getProfile = async () => {
   const { data } = await request.get("/user/profile");
   return data;

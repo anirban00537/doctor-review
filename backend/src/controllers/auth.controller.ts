@@ -28,9 +28,9 @@ const registerDoctor = catchAsync(async (req, res) => {
 const login = catchAsync(async (req, res) => {
   const { email, password } = req.body;
   const user = await authService.loginUserWithEmailAndPassword(email, password, res);
-  if (user.role === DOCTOR) {
-    errorResponse(res, 'Cannot login You are a doctor!');
-  }
+  // if (user.role === DOCTOR) {
+  //   errorResponse(res, 'Cannot login You are a doctor!');
+  // }
   const tokens = await tokenService.generateAuthTokens(user);
   successResponse(res, 'Login successful', { user, tokens });
 });

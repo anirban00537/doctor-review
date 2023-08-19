@@ -3,6 +3,8 @@ import auth from '../../middlewares/auth';
 import Doctors from '../../controllers/doctor.controller';
 import validate from '../../middlewares/validate';
 import DoctorValidation from '../../validations/doctor.validation';
+import { imageUpload } from '../../config/multer';
+import { userController } from '../../controllers';
 
 const router = express.Router();
 
@@ -17,7 +19,12 @@ router.post(
   validate(DoctorValidation.DoctorProfile),
   Doctors.editCreateDoctor
 );
-
+router.post(
+  '/add-profile-photo',
+  auth('doctor'),
+  imageUpload.single('photo'),
+  userController.addPhotoUrl
+);
 router.post(
   '/add-service',
   validate(DoctorValidation.DoctorService),

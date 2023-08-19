@@ -2,7 +2,10 @@ import Link from "next/link";
 import AddAppointments from "./add-appoinment";
 
 const DoctorCard = ({ details }) => {
-
+  console.log(
+    details?.doctor?.photo_url.split("/")[1],
+    "details?.doctor?.photo_url.split(" / ")"
+  );
   return (
     <div className="group relative rounded-lg p-4 shadow-md flex items-start">
       <div className="flex-grow text-gray-700 text-center">
@@ -10,7 +13,9 @@ const DoctorCard = ({ details }) => {
           <div className=" border-green-500 border-4 rounded-full overflow-hidden w-20 h-20 mx-auto mb-2">
             <img
               src={
-                details?.doctor?.photo_url ?? "https://via.placeholder.com/80"
+                `http://localhost:3000/uploads/${
+                  details?.doctor?.photo_url.split("/")[1]
+                }` ?? "https://via.placeholder.com/80"
               }
               alt="Doctor"
               className="object-cover w-full h-full"

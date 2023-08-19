@@ -1,8 +1,20 @@
 import Footer from "@/components/footer";
 import Navbar from "@/components/navbar";
-import React from "react";
+import { getServiceDetails } from "@/service/user";
+import React, { useEffect, useState } from "react";
+import { toast } from "react-toastify";
 
 const ServiceDetails = () => {
+  const [details, setDetails] = useState();
+  const getDetails = async () => {
+    const response = await getServiceDetails(6);
+    console.log(response, "This is a response");
+    setDetails(response.data);
+  };
+  useEffect(() => {
+    getDetails();
+  }, []);
+
   return (
     <div>
       <Navbar />
@@ -15,7 +27,7 @@ const ServiceDetails = () => {
                 BRAND NAME
               </h2>
               <h1 className="text-gray-900 text-3xl title-font font-medium mb-4">
-                Animated Night Hill Illustrations
+                {details?.name}
               </h1>
               <div className="flex mb-4">
                 <a className="flex-grow text-indigo-500 border-b-2 border-indigo-500 py-2 text-lg px-1">

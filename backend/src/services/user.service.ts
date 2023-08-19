@@ -1,4 +1,4 @@
-import { User, Role, Prisma, Appointment } from '@prisma/client';
+import { User, Role, Prisma, Appointment, DoctorsService } from '@prisma/client';
 import httpStatus from 'http-status';
 import prisma from '../client';
 import ApiError from '../utils/ApiError';
@@ -80,7 +80,8 @@ const getUserById = async <Key extends keyof User>(
     'role',
     'isEmailVerified',
     'createdAt',
-    'updatedAt'
+    'updatedAt',
+    'photo_url'
   ] as Key[]
 ): Promise<Pick<User, Key> | null> => {
   return prisma.user.findUnique({
@@ -127,6 +128,21 @@ const getApoinments = async (
 
   return { appointments, totalCount, totalPages, currentPage: page };
 };
+const getServiceByIdService = async (serviceId: number): Promise<DoctorsService | null> => {
+  const doctorService = await prisma.doctorsService.findUnique({
+    where: {
+      id: Number(serviceId)
+    },
+    include: {
+      doctor: {
+        include: {
+          doctorProfile: true
+        }
+      }
+    }
+  });
+  return doctorService;
+};
 
 const createAppointment = async (
   userId: number,
@@ -170,7 +186,7 @@ const getUserByEmail = async <Key extends keyof User>(
 const updateUserById = async <Key extends keyof User>(
   userId: number,
   updateBody: Prisma.UserUpdateInput,
-  keys: Key[] = ['id', 'email', 'name', 'photo_url', 'createdAt'] as Key[]
+  keys: Key[] = ['id', 'email', 'name', 'photo_url', 'createdAt', 'photo_url'] as Key[]
 ): Promise<Pick<User, Key> | null> => {
   const user = await getUserById(userId, ['id', 'email', 'name']);
   if (!user) {
@@ -183,7 +199,8 @@ const updateUserById = async <Key extends keyof User>(
     where: { id: user.id },
     data: {
       email: updateBody.email,
-      name: updateBody.name
+      name: updateBody.name,
+      photo_url: updateBody.photo_url
     },
     select: keys.reduce((obj, k) => ({ ...obj, [k]: true }), {})
   });
@@ -208,5 +225,6 @@ export default {
   deleteUserById,
   getApoinments,
   createAppointment,
-  createDoctor
+  createDoctor,
+  getServiceByIdService
 };

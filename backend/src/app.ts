@@ -15,6 +15,8 @@ import ApiError from './utils/ApiError';
 import multer from 'multer';
 
 const app = express();
+app.use('/uploads', express.static('uploads'));
+
 const upload = multer({ dest: 'uploads/' });
 
 if (config.env !== 'test') {
