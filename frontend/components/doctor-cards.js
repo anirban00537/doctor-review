@@ -2,10 +2,6 @@ import Link from "next/link";
 import AddAppointments from "./add-appoinment";
 
 const DoctorCard = ({ details }) => {
-  console.log(
-    details?.doctor?.photo_url.split("/")[1],
-    "details?.doctor?.photo_url.split(" / ")"
-  );
   return (
     <div className="group relative rounded-lg p-4 shadow-md flex items-start">
       <div className="flex-grow text-gray-700 text-center">
@@ -14,7 +10,7 @@ const DoctorCard = ({ details }) => {
             <img
               src={
                 `http://localhost:3000/uploads/${
-                  details?.doctor?.photo_url.split("/")[1]
+                  details?.doctor?.photo_url?.split("/")[1]
                 }` ?? "https://via.placeholder.com/80"
               }
               alt="Doctor"
@@ -33,7 +29,7 @@ const DoctorCard = ({ details }) => {
         </div>
         {/* Add the button for adding appointment to the right */}
         <div className="flex items-center justify-center gap-1">
-          <Link href="/service-details">
+          <Link href={`/service-details/${details?.id}`}>
             <button className="bg-green-500 text-sm hover:bg-green-600 text-white font-semibold py-2 px-4 rounded">
               Details
             </button>

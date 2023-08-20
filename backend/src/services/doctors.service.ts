@@ -3,9 +3,10 @@ import prisma from '../client';
 import { CANCELLED, COMPLETED, DOCTOR } from '../utils/core-constants';
 
 const getDoctorProfileById = async (doctor_id: number) => {
-  const doctorProfile = await prisma.user.findUnique({
+  const doctorProfile = await prisma.user.findFirst({
     where: {
-      id: Number(doctor_id)
+      id: Number(doctor_id),
+      role: DOCTOR
     },
     include: {
       doctorProfile: true,
