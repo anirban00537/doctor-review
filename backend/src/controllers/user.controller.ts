@@ -157,7 +157,6 @@ const getUser = catchAsync(async (req, res) => {
 const getServiceById = catchAsync(async (req, res) => {
   try {
     const { serviceId } = req.params;
-    console.log(serviceId, 'serviceId');
     const service = await userService.getServiceByIdService(Number(serviceId));
     console.log(service, 'service');
     if (!service) {

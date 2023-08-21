@@ -10,6 +10,7 @@ const router = express.Router();
 
 router.get('/get-all-doctors-list', Doctors.getAllDoctors);
 router.get('/get-all-service-list', Doctors.getAllService);
+router.get('/get-all-doctor-appointments', auth('doctor'), Doctors.getAllDoctorAppointments);
 
 router.get('/profile', auth('doctor'), Doctors.getDoctorProfile);
 
@@ -19,6 +20,7 @@ router.post(
   validate(DoctorValidation.DoctorProfile),
   Doctors.editCreateDoctor
 );
+router.post('/change-appointment-status', auth('doctor'), Doctors.changeAppointmentStatus);
 router.post(
   '/add-profile-photo',
   auth('doctor'),

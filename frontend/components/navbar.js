@@ -1,5 +1,8 @@
 import Link from "next/link";
+import { useSelector } from "react-redux";
 const Navbar = () => {
+  const { isLoggedIn } = useSelector((state) => state.userInfo);
+
   return (
     <header className="absolute inset-x-0 top-0 z-50">
       <nav
@@ -124,14 +127,43 @@ const Navbar = () => {
                   Reviews
                 </a>
               </div>
-              <div className="py-6">
-                <Link
-                  href="/login"
-                  className="-mx-3 block rounded-lg px-3 py-2.5 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50"
-                >
-                  Log in
-                </Link>
-              </div>
+              {isLoggedIn ? (
+                <div className="border-t border-gray-700 pb-3 pt-4">
+                  <div className="mt-3 space-y-1 px-2">
+                    <div className="flex items-center px-5">
+                      <div className="ml-3">
+                        <div className="text-base font-medium leading-none text-white">
+                          Tom Cook
+                        </div>
+                        <div className="text-sm font-medium leading-none text-gray-400">
+                          tom@example.com
+                        </div>
+                      </div>
+                    </div>
+                    <a
+                      href="#"
+                      className="block rounded-md px-3 py-2 text-base font-medium text-gray-400 hover:bg-gray-700 hover:text-white"
+                    >
+                      Settings
+                    </a>
+                    <a
+                      href="#"
+                      className="block rounded-md px-3 py-2 text-base font-medium text-gray-400 hover:bg-gray-700 hover:text-white"
+                    >
+                      Sign out
+                    </a>
+                  </div>
+                </div>
+              ) : (
+                <div className="py-6">
+                  <Link
+                    href="/login"
+                    className="-mx-3 block rounded-lg px-3 py-2.5 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50"
+                  >
+                    Log in
+                  </Link>
+                </div>
+              )}
             </div>
           </div>
         </div>

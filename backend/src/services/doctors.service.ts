@@ -1,6 +1,6 @@
 import { Appointment, DoctorProfile, DoctorsService, Prisma } from '@prisma/client';
 import prisma from '../client';
-import { CANCELLED, COMPLETED, DOCTOR } from '../utils/core-constants';
+import { CANCELLED, COMPLETED, DOCTOR, SCHEDULED } from '../utils/core-constants';
 
 const getDoctorProfileById = async (doctor_id: number) => {
   const doctorProfile = await prisma.user.findFirst({
@@ -21,7 +21,51 @@ const getDoctorProfileById = async (doctor_id: number) => {
 
   return doctorProfile;
 };
+const getAllDoctorAppointmentsService = async (
+  DoctorID: number,
+  page: number = 1,
+  limit: number = 10
+): Promise<{
+  appointments: Appointment[];
+  totalCount: number;
+  totalPages: number;
+  currentPage: number;
+} | null> => {
+  const skip = (page - 1) * limit;
 
+  const appointments = await prisma.appointment.findMany({
+    where: {
+      doctorId: Number(DoctorID)
+    },
+    include: {
+      doctor: {
+        select: {
+          email: true,
+          name: true,
+          photo_url: true,
+          doctorProfile: true
+        }
+      },
+      user: {
+        select: {
+          name: true,
+          email: true,
+          photo_url: true
+        }
+      }
+    },
+    skip,
+    take: limit
+  });
+  const totalCount = await prisma.appointment.count({
+    where: {
+      doctorId: Number(DoctorID)
+    }
+  });
+  const totalPages = Math.ceil(totalCount / limit);
+
+  return { appointments, totalCount, totalPages, currentPage: page };
+};
 const getAllDoctorsList = async () => {
   const doctorsList = await prisma.user.findMany({
     where: {
@@ -123,6 +167,21 @@ const createDoctorService = async (
 
   return createdData;
 };
+const changeAppointmentStatusService = async (
+  appointmentId: number,
+  status: string
+): Promise<Appointment | null> => {
+  const createdData = await prisma.appointment.update({
+    where: {
+      id: Number(appointmentId)
+    },
+    data: {
+      status: status === SCHEDULED ? SCHEDULED : status === CANCELLED ? CANCELLED : COMPLETED
+    }
+  });
+
+  return createdData;
+};
 
 const changeApoinmentStatus = async (id: number, status: string): Promise<Appointment> => {
   const updatedApoinment = await prisma.appointment.update({
@@ -155,5 +214,7 @@ export {
   createDoctorService,
   updateDoctorService,
   getAllServiceList,
-  changeApoinmentStatus
+  changeApoinmentStatus,
+  getAllDoctorAppointmentsService,
+  changeAppointmentStatusService
 };

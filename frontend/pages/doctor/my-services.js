@@ -1,43 +1,35 @@
 import NoItemFound from "@/components/noItemFound";
 import Pagination from "@/components/pagination";
-import Layout from "@/layout";
-import { getUserAppointments } from "@/service/user";
-import { CANCELLED, SCHEDULED } from "@/utils/core-constants";
-import { SSRAuthCheck } from "@/utils/ssr";
+import DoctorLayout from "@/layout/doctor.layout";
+import { getAllServiceList } from "@/service/doctor";
 import moment from "moment";
 import React, { useEffect, useState } from "react";
-import { useSelector } from "react-redux";
 
-const Dashboard = () => {
+const myServices = () => {
   const [data, setdata] = useState([]);
-  const { isLoggedIn } = useSelector((state) => state.userInfo);
-  const getAppointments = async (page) => {
-    const response = await getUserAppointments(page, 10);
-    console.log(response, "response");
+  const getAllServices = async (page) => {
+    const response = await getAllServiceList(page, 10);
     setdata(response?.data);
+    console.log(response?.data, "response?.data");
   };
   useEffect(() => {
-    isLoggedIn && getAppointments(1);
-  }, [isLoggedIn]);
+    getAllServices();
+  }, []);
   return (
-    <Layout>
+    <DoctorLayout>
       <div
         className="flex items-center justify-between py-2 px-14 relative"
         style={{
           backgroundImage:
-            "url('/multicolor-shapes-black-backround_1297-161.jpg')", // Replace with your image path
+            "url('https://images.unsplash.com/photo-1574169208507-84376144848b?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=879&q=80')", // Replace with your image path
           backgroundSize: "cover", // Adjust as needed
           backgroundPosition: "center", // Adjust as needed
           height: 150,
         }}
       >
         <div>
-          <h3 className="font-semibold text-3xl text-white">
-            Welcome to patient dashboard
-          </h3>
-          <p className="text-sm text-white">
-            Manage your appointments and more.
-          </p>
+          <h3 className="font-semibold text-3xl text-white">Your Services</h3>
+          <p className="text-sm text-white">Manage your services</p>
         </div>
       </div>
       <div className="relative overflow-x-auto shadow-md sm:rounded-lg p-5">
@@ -67,7 +59,7 @@ const Dashboard = () => {
               type="text"
               id="table-search-users"
               className="block p-2 pl-10 text-sm text-gray-900 border border-gray-300 rounded-lg w-80 bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-              placeholder="Search for users"
+              placeholder="Search For Appointment"
             />
           </div>
         </div>
@@ -75,21 +67,19 @@ const Dashboard = () => {
           <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
             <tr>
               <th scope="col" className="px-6 py-3">
-                Doctor Name
+                Service Name
               </th>
               <th scope="col" className="px-6 py-3">
-                Appointment Date
+                Created At
               </th>
               <th scope="col" className="px-6 py-3">
-                Specialist At
-              </th>
-              <th scope="col" className="px-6 py-3">
-                Appointment Status
+                Price{" "}
               </th>
             </tr>
           </thead>
+
           <tbody>
-            {data?.appointments?.map((appointment) => (
+            {data?.map((service) => (
               <tr className="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
                 <th
                   scope="row"
@@ -97,33 +87,14 @@ const Dashboard = () => {
                 >
                   <div className="pl-3">
                     <div className="text-base font-semibold">
-                      {appointment?.doctor?.name}
-                    </div>
-                    <div className="font-normal text-gray-500">
-                      {appointment?.doctor?.email}
+                      {service.name}
                     </div>
                   </div>
                 </th>
                 <td className="px-6 py-4">
-                  {moment(appointment?.date).format("MMMM Do YYYY, h:mm:ss a")}
+                  {moment(service?.createdAt).format("MMMM Do YYYY, h:mm:ss a")}
                 </td>
-                <td className="px-6 py-4">
-                  {appointment?.doctor?.doctorProfile?.specialization
-                    ? appointment?.doctor?.doctorProfile?.specialization
-                    : "Not defined"}
-                </td>
-                <td className="px-6 py-4">
-                  <div className="flex items-center">
-                    {appointment.status === SCHEDULED ? (
-                      <div className="h-2.5 w-2.5 rounded-full bg-green-500 mr-2" />
-                    ) : appointment.status === CANCELLED ? (
-                      <div className="h-2.5 w-2.5 rounded-full bg-red-500 mr-2" />
-                    ) : (
-                      <div className="h-2.5 w-2.5 rounded-full bg-green-500 mr-2" />
-                    )}{" "}
-                    {appointment?.status}
-                  </div>
-                </td>
+                <td className="px-6 py-4">{service?.price}TK</td>
               </tr>
             ))}
           </tbody>
@@ -132,15 +103,8 @@ const Dashboard = () => {
           <NoItemFound message={"No appointment found"} />
         )}
       </div>
-      <Pagination data={data} handlePaginationChange={getAppointments} />
-    </Layout>
+    </DoctorLayout>
   );
 };
-export const getServerSideProps = async (ctx) => {
-  await SSRAuthCheck(ctx);
 
-  return {
-    props: {},
-  };
-};
-export default Dashboard;
+export default myServices;

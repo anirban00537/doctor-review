@@ -3,8 +3,10 @@ import catchAsync from '../utils/catchAsync';
 import { DoctorProfile, DoctorsService, Prisma } from '@prisma/client';
 import {
   changeApoinmentStatus,
+  changeAppointmentStatusService,
   createDoctorService,
   createUpdateDoctorProfile,
+  getAllDoctorAppointmentsService,
   getAllDoctorsList,
   getAllServiceList,
   getDoctorProfileById
@@ -59,6 +61,30 @@ const getAllService = catchAsync(async (req: Request, res: Response) => {
     return errorResponse(res, String(error), null);
   }
 });
+const getAllDoctorAppointments = catchAsync(async (req: Request, res: Response) => {
+  try {
+    const { page, limit } = req.query;
+
+    const token = separateToken(req.headers.authorization);
+    if (!token) {
+      return errorResponse(res, 'Authorization header missing or invalid format', null);
+    }
+    const DoctorID: number = await tokenService.verifyAccessTokenAndGetUserID(token);
+    const doctorProfile = await getDoctorProfileById(Number(DoctorID));
+
+    if (!doctorProfile) {
+      return errorResponse(res, 'Profile not found', null);
+    }
+    const response = await getAllDoctorAppointmentsService(
+      Number(DoctorID),
+      Number(page),
+      Number(limit)
+    );
+    return successResponse(res, 'Doctors appointments retrieved successfully', response);
+  } catch (error) {
+    return errorResponse(res, String(error), null);
+  }
+});
 const getDoctorProfile = catchAsync(async (req: Request, res: Response) => {
   try {
     const token = separateToken(req.headers.authorization);
@@ -103,6 +129,23 @@ const addDoctorServiceController = catchAsync(async (req: Request, res: Response
     return errorResponse(res, String(error), null);
   }
 });
+const changeAppointmentStatus = catchAsync(async (req: Request, res: Response) => {
+  try {
+    const token = separateToken(req.headers.authorization);
+    if (!token) {
+      return errorResponse(res, 'Authorization header missing or invalid format', null);
+    }
+    const { appointment_id, status } = req.body; // Replace with
+
+    const responnse = await changeAppointmentStatusService(appointment_id, status);
+    if (!responnse) {
+      return errorResponse(res, 'Failed to change status!', null);
+    }
+    return successResponse(res, 'Changed successfully!', responnse);
+  } catch (error) {
+    return errorResponse(res, String(error), null);
+  }
+});
 
 export default {
   editCreateDoctor,
@@ -110,5 +153,7 @@ export default {
   getAllDoctors,
   addDoctorServiceController,
   getAllService,
-  changeApoinmentStatusController
+  changeApoinmentStatusController,
+  getAllDoctorAppointments,
+  changeAppointmentStatus
 };

@@ -19,6 +19,8 @@ const login = () => {
       Cookie.set("token", response?.data?.tokens?.access?.token);
       if (response?.data?.user?.role === USER) {
         router.push("/patient/dashboard");
+      } else {
+        router.push("/doctor/dashboard");
       }
     } else {
       toast.error(response.message);
