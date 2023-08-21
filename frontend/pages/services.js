@@ -23,6 +23,25 @@ const DoctorsList = () => {
   return (
     <Layout name="Services">
       <div
+        className="flex items-center justify-between py-2 px-14 relative"
+        style={{
+          backgroundImage:
+            "url('/multicolor-shapes-black-backround_1297-161.jpg')", // Replace with your image path
+          backgroundSize: "cover", // Adjust as needed
+          backgroundPosition: "center", // Adjust as needed
+          height: 150,
+        }}
+      >
+        <div>
+          <h3 className="font-semibold text-lg text-white">
+            Welcome to patient dashboard
+          </h3>
+          <p className="text-sm text-white">
+            Manage your appointments and more.
+          </p>
+        </div>
+      </div>
+      <div
         className="relative isolate px-10  pb-14 lg:px-8 mt-20 overflow-y-auto"
         style={{ height: "100vh", overflow: "hidden" }}
       >

@@ -46,7 +46,7 @@ const Layout = ({ children, name = "Dashboard" }) => {
   return (
     <div className="min-h-full">
       {isLoggedIn ? (
-        <nav className="bg-gray-100 py-3">
+        <nav className="bg-white py-3 border">
           <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
             <div className="flex h-16 items-center justify-between">
               <div className="flex items-center">
@@ -60,18 +60,30 @@ const Layout = ({ children, name = "Dashboard" }) => {
                 <div className="hidden md:block">
                   <div className="ml-10 flex items-baseline space-x-4">
                     {/* Current: "bg-gray-900 text-white", Default: "text-gray-300 hover:bg-gray-700 hover:text-white" */}
-                    <a
-                      href="#"
-                      className="bg-gray-200 text-black rounded-md px-3 py-2 ml-2 text-sm font-medium"
+                    <Link
+                      href="/patient/dashboard"
+                      className="text-black rounded-md px-3 py-2 ml-2 text-sm font-medium"
                       aria-current="page"
                     >
                       Dashboard
-                    </a>
+                    </Link>
                     <Link
                       href="/services"
                       className="text-black hover:bg-gray-700 hover:text-white rounded-md px-3 py-2 text-sm font-medium"
                     >
                       Find Services
+                    </Link>
+                    <Link
+                      href="/patient/profile"
+                      className="text-black hover:bg-gray-700 hover:text-white rounded-md px-3 py-2 text-sm font-medium"
+                    >
+                      Profile
+                    </Link>
+                    <Link
+                      href="/about-us"
+                      className="text-black hover:bg-gray-700 hover:text-white rounded-md px-3 py-2 text-sm font-medium"
+                    >
+                      About us
                     </Link>
                   </div>
                 </div>
@@ -100,7 +112,10 @@ const Layout = ({ children, name = "Dashboard" }) => {
                     </div>
                     {isMenuOpen && (
                       <div
-                        className="absolute right-0 z-10 mt-2 w-48 origin-top-right rounded-md bg-white py-1 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none"
+                        className="absolute right-0 z-10 mt-2  origin-top-right rounded-md bg-white py-1 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none"
+                        style={{
+                          width: "200px",
+                        }}
                         role="menu"
                         aria-orientation="vertical"
                         aria-labelledby="user-menu-button"

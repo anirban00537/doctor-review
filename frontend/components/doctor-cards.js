@@ -3,10 +3,10 @@ import AddAppointments from "./add-appoinment";
 
 const DoctorCard = ({ details }) => {
   return (
-    <div className="group relative rounded-lg p-4 shadow-md flex items-start">
+    <div className="group relative rounded-lg p-4 shadow-md flex items-start bg-white transition duration-300 hover:shadow-lg">
       <div className="flex-grow text-gray-700 text-center">
-        <div className="w-full mb-2">
-          <div className=" border-green-500 border-4 rounded-full overflow-hidden w-20 h-20 mx-auto mb-2">
+        <div className="w-full mb-4">
+          <div className="border-green-500 border-4 rounded-full overflow-hidden w-24 h-24 mx-auto mb-2 shadow-md">
             <img
               src={
                 `http://localhost:3000/uploads/${
@@ -18,19 +18,20 @@ const DoctorCard = ({ details }) => {
             />
           </div>
         </div>
-        <p className="text-xs font-medium uppercase">
+        <p className="text-xs font-medium uppercase text-gray-500">
           {details?.doctor?.doctorProfile?.specialization}
         </p>
         <p className="text-lg font-semibold mb-1">{details?.name}</p>
-        <p className="text-xs font-medium uppercase">{details?.doctor?.name}</p>
-        <div className="mb-2">
-          <p className="text-xs">{details.description}</p>
-          <p className="text-sm font-semibold">Price: {details.price}</p>
+        <p className="text-xs font-medium text-gray-500 uppercase">
+          Dr. {details?.doctor?.name}
+        </p>
+        <div className="mb-2 mt-2 border-t border-gray-200 pt-2">
+          <p className="text-sm text-gray-600">{details.description}</p>
+          <p className="text-sm font-semibold mt-1">Price: {details.price}</p>
         </div>
-        {/* Add the button for adding appointment to the right */}
-        <div className="flex items-center justify-center gap-1">
+        <div className="flex items-center justify-end space-x-2">
           <Link href={`/service-details/${details?.id}`}>
-            <button className="bg-green-500 text-sm hover:bg-green-600 text-white font-semibold py-2 px-4 rounded">
+            <button className="bg-white text-sm hover:bg-green-600 text-green-500 border border-green-500 font-semibold py-2 px-4 rounded transition duration-300">
               Details
             </button>
           </Link>
