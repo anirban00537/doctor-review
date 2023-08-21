@@ -18,3 +18,13 @@ export const changeAppointmentStatus = async (appointment_id, status) => {
   });
   return data;
 };
+
+export const addService = async (service_name, service_price) => {
+  const { data } = await request.post(`/doctor/add-service`, {
+    service_name,
+    service_price,
+  });
+  return data;
+};
+
+// doctor/add-service
