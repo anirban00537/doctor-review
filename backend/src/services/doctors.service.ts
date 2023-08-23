@@ -206,7 +206,30 @@ const updateDoctorService = async (
 
   return updatedData;
 };
+const FindServiceWithIdAndDoctorID = async (
+  doctorID: number,
+  serviceId: number
+): Promise<DoctorsService | null> => {
+  console.log(serviceId, 'serviceDataserviceData');
+  console.log(doctorID, 'serviceDataserviceData');
 
+  const serviceData = await prisma.doctorsService.findFirst({
+    where: {
+      id: Number(serviceId),
+      doctorId: Number(doctorID)
+    }
+  });
+  return serviceData;
+};
+const deleteService = async (serviceId: number): Promise<DoctorsService | null> => {
+  const serviceData = await prisma.doctorsService.delete({
+    where: {
+      id: Number(serviceId)
+    }
+  });
+
+  return serviceData;
+};
 export {
   createUpdateDoctorProfile,
   getDoctorProfileById,
@@ -216,5 +239,7 @@ export {
   getAllServiceList,
   changeApoinmentStatus,
   getAllDoctorAppointmentsService,
-  changeAppointmentStatusService
+  changeAppointmentStatusService,
+  FindServiceWithIdAndDoctorID,
+  deleteService
 };

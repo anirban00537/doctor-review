@@ -1,17 +1,26 @@
 import NoItemFound from "@/components/noItemFound";
-import Pagination from "@/components/pagination";
 import DoctorLayout from "@/layout/doctor.layout";
-import { getAllServiceList } from "@/service/doctor";
+import { ServiceDelete, getAllServiceList } from "@/service/doctor";
 import moment from "moment";
 import React, { useEffect, useState } from "react";
+import { toast } from "react-toastify";
 
 const myServices = () => {
   const [data, setdata] = useState([]);
   const getAllServices = async (page) => {
     const response = await getAllServiceList(page, 10);
     setdata(response?.data);
-    console.log(response?.data, "response?.data");
   };
+  const handleDeleteService = async (serviceId) => {
+    const response = await ServiceDelete(serviceId);
+    if (response.success) {
+      toast.success(response.message);
+      getAllServices();
+    } else {
+      toast.error(response.message);
+    }
+  };
+
   useEffect(() => {
     getAllServices();
   }, []);
@@ -95,6 +104,14 @@ const myServices = () => {
                   {moment(service?.createdAt).format("MMMM Do YYYY, h:mm:ss a")}
                 </td>
                 <td className="px-6 py-4">{service?.price}TK</td>
+                <td className="px-6 py-4">
+                  <button
+                    className="text-red-500 hover:text-red-700"
+                    onClick={() => handleDeleteService(service.id)}
+                  >
+                    Delete
+                  </button>
+                </td>
               </tr>
             ))}
           </tbody>

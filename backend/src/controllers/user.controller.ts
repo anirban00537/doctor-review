@@ -87,9 +87,9 @@ const addPhotoUrl = catchAsync(async (req: Request, res: Response) => {
     if (!token) {
       return errorResponse(res, 'Authorization header missing or invalid format', null);
     }
-
+    console.log(req?.file, 'req.file');
     if (!req.file) {
-      return errorResponse(res, 'No file uploaded', null);
+      return errorResponse(res, 'No file uploaded', req);
     }
 
     const userID: number = await tokenService.verifyAccessTokenAndGetUserID(token);
@@ -108,7 +108,7 @@ const addPhotoUrl = catchAsync(async (req: Request, res: Response) => {
     updatedProfile.photo_url = profileData;
     return successResponse(res, 'Profile photo added successfully', updatedProfile);
   } catch (error) {
-    return errorResponse(res, 'Failed to update photo URL', null);
+    return errorResponse(res, String(error), null);
   }
 });
 

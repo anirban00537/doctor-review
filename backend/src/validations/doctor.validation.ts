@@ -9,6 +9,7 @@ const DoctorProfile = {
     doctor_id: Joi.number().integer().required()
   })
 };
+
 const DoctorService = {
   body: Joi.object().keys({
     service_name: Joi.string().required(),

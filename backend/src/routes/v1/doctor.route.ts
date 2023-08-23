@@ -20,6 +20,12 @@ router.post(
   validate(DoctorValidation.DoctorProfile),
   Doctors.editCreateDoctor
 );
+router.delete(
+  '/service/:service_id',
+  auth('doctor'),
+  Doctors.delete_service
+);
+
 router.post('/change-appointment-status', auth('doctor'), Doctors.changeAppointmentStatus);
 router.post(
   '/add-profile-photo',

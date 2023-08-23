@@ -2,10 +2,12 @@ import { Request, Response } from 'express';
 import catchAsync from '../utils/catchAsync';
 import { DoctorProfile, DoctorsService, Prisma } from '@prisma/client';
 import {
+  FindServiceWithIdAndDoctorID,
   changeApoinmentStatus,
   changeAppointmentStatusService,
   createDoctorService,
   createUpdateDoctorProfile,
+  deleteService,
   getAllDoctorAppointmentsService,
   getAllDoctorsList,
   getAllServiceList,
@@ -17,7 +19,7 @@ import { tokenService } from '../services';
 const editCreateDoctor = catchAsync(async (req: Request, res: Response) => {
   try {
     const { doctor_id } = req.body;
-    const doctorsProfileData: DoctorProfile = req.body;
+    const doctorsProfileData = req.body;
     const Doctor = await getDoctorProfileById(doctor_id);
     if (!Doctor) {
       return errorResponse(res, 'Invalid doctor id!', null);
@@ -29,6 +31,29 @@ const editCreateDoctor = catchAsync(async (req: Request, res: Response) => {
     return errorResponse(res, 'Failed to edit profile!', null);
   } catch (error) {
     return errorResponse(res, 'An error occurred!', null);
+  }
+});
+const delete_service = catchAsync(async (req: Request, res: Response) => {
+  try {
+    const { service_id } = req.params;
+    const token = separateToken(req.headers.authorization);
+    if (!token) {
+      return errorResponse(res, 'Authorization header missing or invalid format', null);
+    }
+    const DoctorID: number = await tokenService.verifyAccessTokenAndGetUserID(token);
+
+    const serviceFound = await FindServiceWithIdAndDoctorID(Number(DoctorID), Number(service_id));
+    if (serviceFound) {
+      const response = await deleteService(Number(service_id));
+      if (response) {
+        return successResponse(res, 'Service Deleted Successfully', null);
+      } else {
+        return errorResponse(res, 'Service deleted failed', null);
+      }
+    }
+    return errorResponse(res, 'Service deleted failed', null);
+  } catch (error) {
+    return errorResponse(res, String(error), null);
   }
 });
 const getAllDoctors = catchAsync(async (req: Request, res: Response) => {
@@ -155,5 +180,6 @@ export default {
   getAllService,
   changeApoinmentStatusController,
   getAllDoctorAppointments,
-  changeAppointmentStatus
+  changeAppointmentStatus,
+  delete_service
 };

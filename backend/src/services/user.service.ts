@@ -81,12 +81,17 @@ const getUserById = async <Key extends keyof User>(
     'isEmailVerified',
     'createdAt',
     'updatedAt',
-    'photo_url'
+    'photo_url',
+    'createdAt'
   ] as Key[]
 ): Promise<Pick<User, Key> | null> => {
   return prisma.user.findUnique({
     where: { id: Number(id) },
-    select: keys.reduce((obj, k) => ({ ...obj, [k]: true }), {})
+    // select: keys.reduce((obj, k) => ({ ...obj, [k]: true }), {})
+    include: {
+      doctorProfile: true,
+      Review: true
+    }
   }) as Promise<Pick<User, Key> | null>;
 };
 const getApoinments = async (
