@@ -5,6 +5,12 @@ export const getAllServiceList = async () => {
   const { data } = await request.get(`/doctor/get-all-service-list`);
   return data;
 };
+
+export const getAllDoctorServiceList = async () => {
+  const { data } = await request.get(`/doctor/get-all-doctor-service-list
+`);
+  return data;
+};
 export const getDoctorAppointments = async (page, limit) => {
   const { data } = await request.get(
     `/doctor/get-all-doctor-appointments?page=${page}&limit=${limit}`

@@ -1,6 +1,10 @@
 import NoItemFound from "@/components/noItemFound";
 import DoctorLayout from "@/layout/doctor.layout";
-import { ServiceDelete, getAllServiceList } from "@/service/doctor";
+import {
+  ServiceDelete,
+  getAllDoctorServiceList,
+  getAllServiceList,
+} from "@/service/doctor";
 import moment from "moment";
 import React, { useEffect, useState } from "react";
 import { toast } from "react-toastify";
@@ -8,7 +12,7 @@ import { toast } from "react-toastify";
 const myServices = () => {
   const [data, setdata] = useState([]);
   const getAllServices = async (page) => {
-    const response = await getAllServiceList(page, 10);
+    const response = await getAllDoctorServiceList();
     setdata(response?.data);
   };
   const handleDeleteService = async (serviceId) => {

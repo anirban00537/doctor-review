@@ -9,6 +9,7 @@ import {
   createUpdateDoctorProfile,
   deleteService,
   getAllDoctorAppointmentsService,
+  getAllDoctorServiceListService,
   getAllDoctorsList,
   getAllServiceList,
   getDoctorProfileById
@@ -100,12 +101,32 @@ const getAllDoctorAppointments = catchAsync(async (req: Request, res: Response) 
     if (!doctorProfile) {
       return errorResponse(res, 'Profile not found', null);
     }
-    const response = await getAllDoctorAppointmentsService(
-      Number(DoctorID),
-      Number(page),
-      Number(limit)
-    );
+    const response = await getAllDoctorAppointmentsService(Number(DoctorID), Number(page), Number(limit));
     return successResponse(res, 'Doctors appointments retrieved successfully', response);
+  } catch (error) {
+    return errorResponse(res, String(error), null);
+  }
+});
+
+const getAllDoctorServiceListController = catchAsync(async (req: Request, res: Response) => {
+  try {
+    const { page, limit } = req.query;
+
+    const token = separateToken(req.headers.authorization);
+    if (!token) {
+      return errorResponse(res, 'Authorization header missing or invalid format', null);
+    }
+    const DoctorID: number = await tokenService.verifyAccessTokenAndGetUserID(token);
+    const doctorProfile = await getDoctorProfileById(Number(DoctorID));
+
+    if (!doctorProfile) {
+      return errorResponse(res, 'Profile not found', null);
+    }
+    const response = await getAllDoctorServiceListService(Number(DoctorID));
+    if (response) {
+      return successResponse(res, 'Doctors appointments retrieved successfully', response);
+    }
+    return errorResponse(res, 'Something went wrong', null);
   } catch (error) {
     return errorResponse(res, String(error), null);
   }
@@ -181,5 +202,6 @@ export default {
   changeApoinmentStatusController,
   getAllDoctorAppointments,
   changeAppointmentStatus,
-  delete_service
+  delete_service,
+  getAllDoctorServiceListController
 };
