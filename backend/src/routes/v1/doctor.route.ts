@@ -10,6 +10,7 @@ const router = express.Router();
 
 router.get('/get-all-doctors-list', Doctors.getAllDoctors);
 router.get('/get-all-service-list', Doctors.getAllService);
+router.get('/get-all-doctor-service-list', Doctors.getAllDoctorServiceListController);
 router.get('/get-all-doctor-appointments', auth('doctor'), Doctors.getAllDoctorAppointments);
 
 router.get('/profile', auth('doctor'), Doctors.getDoctorProfile);

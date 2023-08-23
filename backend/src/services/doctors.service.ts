@@ -66,6 +66,34 @@ const getAllDoctorAppointmentsService = async (
 
   return { appointments, totalCount, totalPages, currentPage: page };
 };
+const getAllDoctorServiceListService = async (
+  DoctorID: number
+): Promise<DoctorsService[] | null> => {
+  const DoctorServiceRes = await prisma.doctorsService.findMany({
+    where: {
+      doctorId: Number(DoctorID)
+    },
+    include: {
+      doctor: {
+        select: {
+          name: true,
+          email: true,
+          photo_url: true,
+          Review: true,
+          id: true,
+          doctorProfile: {
+            select: {
+              clinicAddress: true,
+              specialization: true
+            }
+          }
+        }
+      }
+    }
+  });
+
+  return DoctorServiceRes;
+};
 const getAllDoctorsList = async () => {
   const doctorsList = await prisma.user.findMany({
     where: {
@@ -241,5 +269,6 @@ export {
   getAllDoctorAppointmentsService,
   changeAppointmentStatusService,
   FindServiceWithIdAndDoctorID,
-  deleteService
+  deleteService,
+  getAllDoctorServiceListService
 };
