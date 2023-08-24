@@ -89,7 +89,7 @@ const getAllService = catchAsync(async (req: Request, res: Response) => {
 });
 const getAllDoctorAppointments = catchAsync(async (req: Request, res: Response) => {
   try {
-    const { page, limit } = req.query;
+    const { page, limit, search } = req.query;
 
     const token = separateToken(req.headers.authorization);
     if (!token) {
@@ -97,11 +97,16 @@ const getAllDoctorAppointments = catchAsync(async (req: Request, res: Response) 
     }
     const DoctorID: number = await tokenService.verifyAccessTokenAndGetUserID(token);
     const doctorProfile = await getDoctorProfileById(Number(DoctorID));
-
+    console.log(DoctorID, 'DoctorID');
     if (!doctorProfile) {
       return errorResponse(res, 'Profile not found', null);
     }
-    const response = await getAllDoctorAppointmentsService(Number(DoctorID), Number(page), Number(limit));
+    const response = await getAllDoctorAppointmentsService(
+      Number(DoctorID),
+      Number(page),
+      Number(limit),
+      search ? String(search) : null
+    );
     return successResponse(res, 'Doctors appointments retrieved successfully', response);
   } catch (error) {
     return errorResponse(res, String(error), null);
