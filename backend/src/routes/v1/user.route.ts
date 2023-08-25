@@ -26,11 +26,6 @@ router.post(
   auth(),
   userController.createAppointment
 );
-router.post(
-  '/add-review',
-  validate(userValidation.addApoinment),
-  auth(),
-  userController.createAppointment
-);
+router.post('/add-review', validate(userValidation.addReview), auth(), userController.addReview);
 
 export default router;

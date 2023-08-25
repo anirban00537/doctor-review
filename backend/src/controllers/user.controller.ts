@@ -87,7 +87,6 @@ const addPhotoUrl = catchAsync(async (req: Request, res: Response) => {
     if (!token) {
       return errorResponse(res, 'Authorization header missing or invalid format', null);
     }
-    console.log(req?.file, 'req.file');
     if (!req.file) {
       return errorResponse(res, 'No file uploaded', req);
     }
@@ -137,6 +136,29 @@ const getUsers = catchAsync(async (req, res) => {
     const options = pick(req.query, ['sortBy', 'limit', 'page']);
     const result = await userService.queryUsers(filter, options);
     return successResponse(res, 'Users retrieved successfully', result);
+  } catch (error) {
+    return errorResponse(res, '', null);
+  }
+});
+const addReview = catchAsync(async (req, res) => {
+  try {
+    const { rating, comment, doctorsServiceId } = req.body;
+
+    const token = separateToken(req.headers.authorization);
+    if (!token) {
+      return errorResponse(res, 'Authorization header missing or invalid format', null);
+    }
+    const userID: number = await tokenService.verifyAccessTokenAndGetUserID(token);
+    const user: User | null = await userService.getUserById(userID);
+
+    if (!user) {
+      return errorResponse(res, 'User not found', null);
+    }
+    const review = await userService.addReviewService(rating, comment, doctorsServiceId, userID);
+    if (!review) {
+      return errorResponse(res, 'Failed to review doctor', null);
+    }
+    return successResponse(res, 'Reviewed Successfully', review);
   } catch (error) {
     return errorResponse(res, '', null);
   }
@@ -192,5 +214,6 @@ export default {
   editUser,
   getUserApoinments,
   createAppointment,
-  getServiceById
+  getServiceById,
+  addReview
 };

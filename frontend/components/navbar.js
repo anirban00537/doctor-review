@@ -1,7 +1,8 @@
+import { DOCTOR, USER } from "@/utils/core-constants";
 import Link from "next/link";
 import { useSelector } from "react-redux";
 const Navbar = () => {
-  const { isLoggedIn } = useSelector((state) => state.userInfo);
+  const { isLoggedIn, user } = useSelector((state) => state.userInfo);
 
   return (
     <header className="absolute inset-x-0 top-0 z-50">
@@ -62,12 +63,28 @@ const Navbar = () => {
           </a>
         </div>
         <div className="hidden lg:flex lg:flex-1 lg:justify-end">
-          <Link
-            href="/login"
-            className="text-sm font-semibold leading-6 text-gray-900"
-          >
-            Log in <span aria-hidden="true">→</span>
-          </Link>
+          {user?.role === USER ? (
+            <Link
+              href="/patient/dashboard"
+              className="text-sm font-semibold leading-6 text-gray-900"
+            >
+              User Dashboard <span aria-hidden="true">→</span>
+            </Link>
+          ) : user?.role === DOCTOR ? (
+            <Link
+              href="/doctor/dashboard"
+              className="text-sm font-semibold leading-6 text-gray-900"
+            >
+              Doctor Dashboard <span aria-hidden="true">→</span>
+            </Link>
+          ) : (
+            <Link
+              href="/login"
+              className="text-sm font-semibold leading-6 text-gray-900"
+            >
+              Log in <span aria-hidden="true">→</span>
+            </Link>
+          )}{" "}
         </div>
       </nav>
       {/* Mobile menu, show/hide based on menu open state. */}

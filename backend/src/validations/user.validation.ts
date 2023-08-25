@@ -53,6 +53,13 @@ const addApoinment = {
     doctorsServiceId: Joi.number().required()
   })
 };
+const addReview = {
+  body: Joi.object().keys({
+    rating: Joi.number().required(),
+    comment: Joi.string().required(),
+    doctorsServiceId: Joi.number().required(),
+  })
+};
 
 export default {
   createUser,
@@ -60,5 +67,6 @@ export default {
   getUser,
   updateUser,
   deleteUser,
-  addApoinment
+  addApoinment,
+  addReview
 };

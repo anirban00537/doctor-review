@@ -1,4 +1,4 @@
-import { User, Role, Prisma, Appointment, DoctorsService } from '@prisma/client';
+import { User, Role, Prisma, Appointment, DoctorsService, Review } from '@prisma/client';
 import httpStatus from 'http-status';
 import prisma from '../client';
 import ApiError from '../utils/ApiError';
@@ -118,6 +118,15 @@ const getApoinments = async (
           photo_url: true,
           doctorProfile: true
         }
+      },
+      DoctorsService: {
+        include: {
+          review: {
+            include: {
+              user: true
+            }
+          }
+        }
       }
     },
     skip,
@@ -142,6 +151,11 @@ const getServiceByIdService = async (serviceId: number): Promise<DoctorsService 
       doctor: {
         include: {
           doctorProfile: true
+        }
+      },
+      review: {
+        include: {
+          user: true
         }
       }
     }
@@ -220,6 +234,21 @@ const deleteUserById = async (userId: number): Promise<User> => {
   await prisma.user.delete({ where: { id: user.id } });
   return user;
 };
+const addReviewService = async (
+  rating: number,
+  comment: string,
+  doctorsServiceId: number,
+  userId: number
+): Promise<Review | null> => {
+  return prisma.review.create({
+    data: {
+      rating: Number(rating),
+      comment: comment,
+      userId: Number(userId),
+      doctorsServiceId: Number(doctorsServiceId)
+    }
+  });
+};
 
 export default {
   createUser,
@@ -231,5 +260,6 @@ export default {
   getApoinments,
   createAppointment,
   createDoctor,
-  getServiceByIdService
+  getServiceByIdService,
+  addReviewService
 };

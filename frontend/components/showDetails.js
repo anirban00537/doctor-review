@@ -1,14 +1,31 @@
+import { addReview } from "@/service/user";
 import { CANCELLED, SCHEDULED } from "@/utils/core-constants";
 import { Button, Modal } from "flowbite-react";
 import moment from "moment";
 import React, { useState } from "react";
+import { FaStar, FaStarHalfAlt } from "react-icons/fa"; // Import the star icons from react-icons
+import { toast } from "react-toastify";
+import ReviewList from "./reviewComponent";
+import { useRouter } from "next/router";
 
 const AppointmentDetails = ({ details }) => {
   const [openModal, setOpenModal] = useState(false);
   const props = { openModal, setOpenModal };
-
-  const addUserAppointment = () => {
-    // Implement this function to add the user's appointment
+  const [rating, setRating] = useState(0);
+  const [comment, setComment] = useState("");
+  const router = useRouter();
+  const addReviewFunction = async () => {
+    const response = await addReview(rating, comment, details.doctorsServiceId);
+    if (response.success) {
+      toast.success(response?.message);
+      router.push("/service-details/" + details?.doctorsServiceId);
+    } else {
+      toast.error(response?.message);
+    }
+  };
+  console.log(details, "details");
+  const handleRatingChange = (value) => {
+    setRating(value);
   };
 
   return (
@@ -21,9 +38,10 @@ const AppointmentDetails = ({ details }) => {
       </button>
 
       <Modal show={props.openModal} onClose={() => props.setOpenModal(false)}>
-        <Modal.Header className=" text-white">Appointment Form</Modal.Header>
+        <Modal.Header className="text-white">Appointment Form</Modal.Header>
         <Modal.Body className="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-md">
           <div className="grid gap-4">
+            {/* Existing fields */}
             <div className="grid grid-cols-2">
               <span className="text-sm font-medium text-gray-600 dark:text-gray-300">
                 Choose date:
@@ -75,40 +93,50 @@ const AppointmentDetails = ({ details }) => {
                 </span>
               </div>
             </div>
-            <div className="grid grid-cols-2">
-              <span className="text-sm font-medium text-gray-600 dark:text-gray-300">
-                Review:
-              </span>
-              <textarea
-                className="block w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:border-indigo-500 dark:bg-gray-700 dark:text-white"
-                rows="4"
-                placeholder="Write your review..."
-              />
-            </div>
-            <div className="grid grid-cols-2">
-              <span className="text-sm font-medium text-gray-600 dark:text-gray-300">
-                Reviews:
-              </span>
-              <div className="space-y-2">
-                <div className="flex items-center">
-                  <div className="h-2.5 w-2.5 rounded-full bg-green-500 mr-2" />
-                  <span className="text-sm text-gray-600 dark:text-gray-300">
-                    Great experience! Would recommend.
+            {details?.status === SCHEDULED && (
+              <>
+                <div className="grid grid-cols-2">
+                  <span className="text-sm font-medium text-gray-600 dark:text-gray-300">
+                    Review:
                   </span>
+                  <textarea
+                    className="block w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:border-indigo-500 dark:bg-gray-700 dark:text-white"
+                    rows="4"
+                    placeholder="Write your review..."
+                    value={comment}
+                    onChange={(e) => {
+                      setComment(e.target.value);
+                    }}
+                  />
                 </div>
-                <div className="flex items-center">
-                  <div className="h-2.5 w-2.5 rounded-full bg-red-500 mr-2" />
-                  <span className="text-sm text-gray-600 dark:text-gray-300">
-                    Appointment was cancelled without notice.
+                <div className="grid grid-cols-2">
+                  <span className="text-sm font-medium text-gray-600 dark:text-gray-300">
+                    Rating:
                   </span>
+                  <div className="flex items-center">
+                    {[1, 2, 3, 4, 5].map((star) => (
+                      <button
+                        key={star}
+                        onClick={() => handleRatingChange(star)}
+                      >
+                        {star <= rating ? (
+                          <FaStar className="text-yellow-500" size={22} />
+                        ) : (
+                          <FaStarHalfAlt className="text-gray-300" size={22} />
+                        )}
+                      </button>
+                    ))}
+                  </div>
                 </div>
-                {/* Add more review items here */}
-              </div>
-            </div>
+              </>
+            )}
           </div>
         </Modal.Body>
+
         <Modal.Footer className="bg-gray-100 dark:bg-gray-800">
-          <Button color="success">Confirm</Button>
+          <Button color="success" onClick={addReviewFunction}>
+            Add Review
+          </Button>
           <Button color="gray" onClick={() => props.setOpenModal(false)}>
             Decline
           </Button>
