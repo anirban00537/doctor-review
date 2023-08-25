@@ -6,7 +6,6 @@ import {
   changeAppointmentStatus,
   getDoctorAppointments,
 } from "@/service/doctor";
-import { getUserAppointments } from "@/service/user";
 import { CANCELLED, COMPLETED, SCHEDULED } from "@/utils/core-constants";
 import { SSRAuthCheck } from "@/utils/ssr";
 import moment from "moment";
@@ -16,8 +15,9 @@ import { useSelector } from "react-redux";
 const Dashboard = () => {
   const [data, setdata] = useState([]);
   const { isLoggedIn } = useSelector((state) => state.userInfo);
-  const getAppointments = async (page) => {
-    const response = await getDoctorAppointments(page, 10);
+  const [search, setSearch] = useState(null);
+  const getAppointments = async (page, search) => {
+    const response = await getDoctorAppointments(page, 10, search);
     setdata(response?.data);
   };
   const changeStatus = async (appointment_id, status) => {
@@ -27,8 +27,8 @@ const Dashboard = () => {
     }
   };
   useEffect(() => {
-    isLoggedIn && getAppointments(1);
-  }, [isLoggedIn]);
+    isLoggedIn && getAppointments(1, search);
+  }, [isLoggedIn, search]);
   return (
     <DoctorLayout>
       <div
@@ -78,6 +78,9 @@ const Dashboard = () => {
               id="table-search-users"
               className="block p-2 pl-10 text-sm text-gray-900 border border-gray-300 rounded-lg w-80 bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
               placeholder="Search For Appointment"
+              onChange={(e) => {
+                setSearch(e.target.value);
+              }}
             />
           </div>
         </div>
@@ -154,7 +157,7 @@ const Dashboard = () => {
                       <div
                         className={`${
                           appointment.status === SCHEDULED
-                            ? "bg-yellow-500"
+                            ? "bg-green-500"
                             : appointment.status === COMPLETED
                             ? "bg-green-500"
                             : "bg-red-500"

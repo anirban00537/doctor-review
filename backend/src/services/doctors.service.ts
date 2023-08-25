@@ -24,7 +24,8 @@ const getDoctorProfileById = async (doctor_id: number) => {
 const getAllDoctorAppointmentsService = async (
   DoctorID: number,
   page: number = 1,
-  limit: number = 10
+  limit: number = 10,
+  search: string | null
 ): Promise<{
   appointments: Appointment[];
   totalCount: number;
@@ -33,10 +34,34 @@ const getAllDoctorAppointmentsService = async (
 } | null> => {
   const skip = (page - 1) * limit;
 
+  const whereClause: any = {
+    doctorId: Number(DoctorID)
+  };
+
+  if (search != undefined) {
+    console.log('entering search', search);
+    whereClause.OR = [
+      {
+        user: {
+          name: {
+            contains: search,
+            mode: 'insensitive'
+          }
+        }
+      },
+      {
+        user: {
+          email: {
+            contains: search,
+            mode: 'insensitive'
+          }
+        }
+      }
+    ];
+  }
+
   const appointments = await prisma.appointment.findMany({
-    where: {
-      doctorId: Number(DoctorID)
-    },
+    where: whereClause,
     include: {
       doctor: {
         select: {
@@ -57,15 +82,16 @@ const getAllDoctorAppointmentsService = async (
     skip,
     take: limit
   });
+
   const totalCount = await prisma.appointment.count({
-    where: {
-      doctorId: Number(DoctorID)
-    }
+    where: whereClause
   });
+
   const totalPages = Math.ceil(totalCount / limit);
 
   return { appointments, totalCount, totalPages, currentPage: page };
 };
+
 const getAllDoctorServiceListService = async (
   DoctorID: number
 ): Promise<DoctorsService[] | null> => {

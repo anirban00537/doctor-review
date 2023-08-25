@@ -6,6 +6,14 @@ export const getUserAppointments = async (page, limit) => {
   );
   return data;
 };
+export const addReview = async (rating, comment, doctorsServiceId) => {
+  const { data } = await request.post(`/user/add-review`, {
+    rating: rating,
+    comment: comment,
+    doctorsServiceId: doctorsServiceId,
+  });
+  return data;
+};
 // user/service-details/6
 export const getServiceDetails = async (serviceId) => {
   const { data } = await request.get(`/user/service-details/${serviceId}`);

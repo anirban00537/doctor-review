@@ -11,13 +11,19 @@ export const getAllDoctorServiceList = async () => {
 `);
   return data;
 };
-export const getDoctorAppointments = async (page, limit) => {
-  const { data } = await request.get(
-    `/doctor/get-all-doctor-appointments?page=${page}&limit=${limit}`
-  );
-  return data;
+export const getDoctorAppointments = async (page, limit, search) => {
+  if (search) {
+    const { data } = await request.get(
+      `/doctor/get-all-doctor-appointments?page=${page}&limit=${limit}&search=${search}`
+    );
+    return data;
+  } else {
+    const { data } = await request.get(
+      `/doctor/get-all-doctor-appointments?page=${page}&limit=${limit}`
+    );
+    return data;
+  }
 };
-//  '/service/:service_id',
 export const ServiceDelete = async (service_id) => {
   const { data } = await request.delete(`/doctor/service/${service_id}`);
   return data;

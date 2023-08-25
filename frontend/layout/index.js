@@ -8,24 +8,17 @@ import Link from "next/link";
 import Navbar from "@/components/navbar";
 const Layout = ({ children, name = "Dashboard" }) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const { isLoggedIn } = useSelector((state) => state.userInfo);
+  const { isLoggedIn, user } = useSelector((state) => state.userInfo);
 
   const menuRef = useRef(null);
   const dispatch = useDispatch();
   const router = useRouter();
-  const getProfileData = async () => {
-    const response = await getProfile();
-    dispatch(setUser(response.data));
-  };
   const makeLogout = async () => {
     dispatch(clearUser());
     Cookies.remove("token");
     router.push("/");
   };
-  useEffect(() => {
-    const token = Cookies.get("token");
-    token && getProfileData();
-  }, []);
+
   useEffect(() => {
     const handleOutsideClick = (event) => {
       if (menuRef.current && !menuRef.current.contains(event.target)) {
