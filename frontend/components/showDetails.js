@@ -1,5 +1,5 @@
 import { addReview } from "@/service/user";
-import { CANCELLED, SCHEDULED } from "@/utils/core-constants";
+import { CANCELLED, COMPLETED, SCHEDULED } from "@/utils/core-constants";
 import { Button, Modal } from "flowbite-react";
 import moment from "moment";
 import React, { useState } from "react";
@@ -93,7 +93,7 @@ const AppointmentDetails = ({ details }) => {
                 </span>
               </div>
             </div>
-            {details?.status === SCHEDULED && (
+            {details?.status === COMPLETED && (
               <>
                 <div className="grid grid-cols-2">
                   <span className="text-sm font-medium text-gray-600 dark:text-gray-300">
@@ -134,9 +134,12 @@ const AppointmentDetails = ({ details }) => {
         </Modal.Body>
 
         <Modal.Footer className="bg-gray-100 dark:bg-gray-800">
-          <Button color="success" onClick={addReviewFunction}>
-            Add Review
-          </Button>
+          {details?.status === COMPLETED && (
+            <Button color="success" onClick={addReviewFunction}>
+              Add Review
+            </Button>
+          )}
+
           <Button color="gray" onClick={() => props.setOpenModal(false)}>
             Decline
           </Button>
