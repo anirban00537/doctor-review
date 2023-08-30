@@ -47,13 +47,19 @@ model PatientHistory {
 }
 
 model DoctorProfile {
-  id              Int      @id @default(autoincrement())
-  specialization  String?
-  qualification   String?
-  experienceYears Int?
-  clinicAddress   String?
-  createdAt       DateTime @default(now())
-  updatedAt       DateTime @updatedAt
+  id                   Int      @id @default(autoincrement())
+  specialization       String?
+  qualification        String?
+  experienceYears      Int?
+  clinicAddress        String?
+  education            String?
+  publication_link     String?
+  current_place        String?
+  country              String?
+  other_inportent_link String?
+  description          String?
+  createdAt            DateTime @default(now())
+  updatedAt            DateTime @updatedAt
 
   // One-to-one relation with User
   user   User @relation(fields: [userId], references: [id])

@@ -167,6 +167,7 @@ const createUpdateDoctorProfile = async (
   profileData: DoctorProfile,
   doctor_id: number
 ): Promise<DoctorProfile | null> => {
+  console.log(profileData, 'profileData');
   const updatedDoctorProfile = await prisma.doctorProfile.upsert({
     where: {
       userId: Number(doctor_id)
@@ -176,13 +177,26 @@ const createUpdateDoctorProfile = async (
       experienceYears: Number(profileData.experienceYears),
       qualification: profileData.qualification,
       specialization: profileData.specialization,
+      education: profileData.education,
+      publication_link: profileData.publication_link,
+      current_place: profileData.current_place,
+      country: profileData.country,
+      other_inportent_link: profileData.other_inportent_link,
+      description: profileData.description,
+
       userId: Number(doctor_id)
     },
     update: {
       clinicAddress: profileData.clinicAddress,
       experienceYears: Number(profileData.experienceYears),
       qualification: profileData.qualification,
-      specialization: profileData.specialization
+      specialization: profileData.specialization,
+      education: profileData.education,
+      publication_link: profileData.publication_link,
+      current_place: profileData.current_place,
+      country: profileData.country,
+      other_inportent_link: profileData.other_inportent_link,
+      description: profileData.description
     }
   });
 

@@ -49,6 +49,12 @@ export const doctorProfileEdit = async (
   qualification,
   experienceYears,
   clinicAddress,
+  education,
+  publication_link,
+  current_place,
+  country,
+  other_inportent_link,
+  description,
   doctor_id
 ) => {
   const { data } = await request.post(`/doctor/profile/edit`, {
@@ -57,6 +63,12 @@ export const doctorProfileEdit = async (
     experienceYears,
     clinicAddress,
     doctor_id,
+    education,
+    publication_link,
+    current_place,
+    country,
+    other_inportent_link,
+    description,
   });
   return data;
 };

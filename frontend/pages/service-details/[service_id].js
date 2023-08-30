@@ -26,7 +26,7 @@ const ServiceDetails = () => {
       <section className="text-gray-600 body-font overflow-hidden">
         <div className="container px-5 py-24 mx-auto">
           <div className="lg:w-4/5 mx-auto flex flex-wrap">
-            <div className="lg:w-1/2 w-full lg:pr-10 lg:py-6 mb-6 lg:mb-0">
+            <div className="lg:w-1/2 w-full lg:pr-10 lg:py-6 mb-2 lg:mb-0">
               <h2 className="text-sm title-font text-gray-500 tracking-widest">
                 {details?.doctor?.name}
               </h2>
@@ -38,25 +38,61 @@ const ServiceDetails = () => {
                   Description
                 </a>
               </div>
-
-              <div className="flex border-t border-gray-200 py-2">
+              <div className="flex border-gray-200 border-b py-2">
                 <span className="text-gray-500">Doctor Email</span>
                 <span className="ml-auto text-gray-900">
                   {details?.doctor?.email}
                 </span>
               </div>
-              <div className="flex border-t border-gray-200 py-2">
+              <div className="flex border-gray-200 border-b py-2">
                 <span className="text-gray-500">Clinic Address</span>
                 <span className="ml-auto text-gray-900">
                   {details?.doctor?.doctorProfile?.clinicAddress}
                 </span>
               </div>
-              <div className="flex border-t border-b mb-6 border-gray-200 py-2">
+              <div className="flex border-b mb-2 border-gray-200 py-2">
                 <span className="text-gray-500">Doctor Qualification</span>
                 <span className="ml-auto text-gray-900">
                   {details?.doctor?.doctorProfile?.qualification}
                 </span>
               </div>
+              <div className="flex border-b mb-2 border-gray-200 py-2">
+                <span className="text-gray-500">Country</span>
+                <span className="ml-auto text-gray-900">
+                  {details?.doctor?.doctorProfile?.country}
+                </span>
+              </div>
+              <div className="flex border-b mb-2 border-gray-200 py-2">
+                <span className="text-gray-500">Current place</span>
+                <span className="ml-auto text-gray-900">
+                  {details?.doctor?.doctorProfile?.current_place}
+                </span>
+              </div>
+              <div className="flex border-b mb-2 border-gray-200 py-2">
+                <span className="text-gray-500">description</span>
+                <span className="ml-auto text-gray-900">
+                  {details?.doctor?.doctorProfile?.description}
+                </span>
+              </div>
+              <div className="flex border-b mb-2 border-gray-200 py-2">
+                <span className="text-gray-500">Publication Link</span>
+                <span className="ml-auto text-gray-900">
+                  {details?.doctor?.doctorProfile?.publication_link}
+                </span>
+              </div>
+              <div className="flex border-b mb-2 border-gray-200 py-2">
+                <span className="text-gray-500">Qualification</span>
+                <span className="ml-auto text-gray-900">
+                  {details?.doctor?.doctorProfile?.qualification}
+                </span>
+              </div>
+              <div className="flex border-b mb-2 border-gray-200 py-2">
+                <span className="text-gray-500">Education</span>
+                <span className="ml-auto text-gray-900">
+                  {details?.doctor?.doctorProfile?.education}
+                </span>
+              </div>
+
               <div className="flex">
                 <span className="title-font font-medium text-2xl text-gray-900">
                   {details?.price}TK

@@ -9,9 +9,11 @@ const DoctorCard = ({ details }) => {
           <div className="border-green-500 border-4 rounded-full overflow-hidden w-24 h-24 mx-auto mb-2 shadow-md">
             <img
               src={
-                `http://localhost:3000/uploads/${
-                  details?.doctor?.photo_url?.split("/")[1]
-                }` ?? "https://via.placeholder.com/80"
+                details?.doctor?.photo_url
+                  ? `http://localhost:3000/uploads/${
+                      details?.doctor?.photo_url?.split("/")[1]
+                    }`
+                  : "https://images.unsplash.com/photo-1505751172876-fa1923c5c528?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1170&q=80"
               }
               alt="Doctor"
               className="object-cover w-full h-full"

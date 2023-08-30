@@ -13,7 +13,6 @@ const Profile = () => {
 
   useEffect(() => {
     setUserInfo(user);
-    console.log(user, "user");
   }, [user]);
 
   const formatJoinDate = (dateString) => {
@@ -42,6 +41,12 @@ const Profile = () => {
       userInfo.doctorProfile.qualification,
       userInfo.doctorProfile.experienceYears,
       userInfo.doctorProfile.clinicAddress,
+      userInfo.doctorProfile.education,
+      userInfo.doctorProfile.publication_link,
+      userInfo.doctorProfile.current_place,
+      userInfo.doctorProfile.country,
+      userInfo.doctorProfile.other_inportent_link,
+      userInfo.doctorProfile.description,
       userInfo.id
     );
     if (response.success) {
@@ -237,6 +242,132 @@ const Profile = () => {
                           doctorProfile: {
                             ...userInfo.doctorProfile,
                             specialization: e.target.value,
+                          },
+                        });
+                      }}
+                    />
+                  </div>
+                </div>
+                <div className="p-2 w-1/2">
+                  <div className="relative">
+                    <label className="leading-7 text-sm text-gray-600">
+                      Education
+                    </label>
+                    <input
+                      type="text"
+                      value={userInfo?.doctorProfile?.education}
+                      className="w-full bg-gray-100 bg-opacity-50 rounded border border-gray-300 focus:border-green-500 focus:bg-white focus:ring-2 focus:ring-green-200 text-base outline-none text-gray-700 py-1 px-3 leading-8 transition-colors duration-200 ease-in-out"
+                      onChange={(e) => {
+                        setUserInfo({
+                          ...userInfo,
+                          doctorProfile: {
+                            ...userInfo.doctorProfile,
+                            education: e.target.value,
+                          },
+                        });
+                      }}
+                    />
+                  </div>
+                </div>
+                <div className="p-2 w-1/2">
+                  <div className="relative">
+                    <label className="leading-7 text-sm text-gray-600">
+                      Publication Link
+                    </label>
+                    <input
+                      type="text"
+                      value={userInfo?.doctorProfile?.publication_link}
+                      className="w-full bg-gray-100 bg-opacity-50 rounded border border-gray-300 focus:border-green-500 focus:bg-white focus:ring-2 focus:ring-green-200 text-base outline-none text-gray-700 py-1 px-3 leading-8 transition-colors duration-200 ease-in-out"
+                      onChange={(e) => {
+                        setUserInfo({
+                          ...userInfo,
+                          doctorProfile: {
+                            ...userInfo.doctorProfile,
+                            publication_link: e.target.value,
+                          },
+                        });
+                      }}
+                    />
+                  </div>
+                </div>
+                <div className="p-2 w-1/2">
+                  <div className="relative">
+                    <label className="leading-7 text-sm text-gray-600">
+                      Current Place
+                    </label>
+                    <input
+                      type="text"
+                      value={userInfo?.doctorProfile?.current_place}
+                      className="w-full bg-gray-100 bg-opacity-50 rounded border border-gray-300 focus:border-green-500 focus:bg-white focus:ring-2 focus:ring-green-200 text-base outline-none text-gray-700 py-1 px-3 leading-8 transition-colors duration-200 ease-in-out"
+                      onChange={(e) => {
+                        setUserInfo({
+                          ...userInfo,
+                          doctorProfile: {
+                            ...userInfo.doctorProfile,
+                            current_place: e.target.value,
+                          },
+                        });
+                      }}
+                    />
+                  </div>
+                </div>
+                <div className="p-2 w-1/2">
+                  <div className="relative">
+                    <label className="leading-7 text-sm text-gray-600">
+                      Country
+                    </label>
+                    <input
+                      type="text"
+                      value={userInfo?.doctorProfile?.country}
+                      className="w-full bg-gray-100 bg-opacity-50 rounded border border-gray-300 focus:border-green-500 focus:bg-white focus:ring-2 focus:ring-green-200 text-base outline-none text-gray-700 py-1 px-3 leading-8 transition-colors duration-200 ease-in-out"
+                      onChange={(e) => {
+                        setUserInfo({
+                          ...userInfo,
+                          doctorProfile: {
+                            ...userInfo.doctorProfile,
+                            country: e.target.value,
+                          },
+                        });
+                      }}
+                    />
+                  </div>
+                </div>
+                <div className="p-2 w-1/2">
+                  <div className="relative">
+                    <label className="leading-7 text-sm text-gray-600">
+                      Other Inportent Link
+                    </label>
+                    <input
+                      type="text"
+                      value={userInfo?.doctorProfile?.other_inportent_link}
+                      className="w-full bg-gray-100 bg-opacity-50 rounded border border-gray-300 focus:border-green-500 focus:bg-white focus:ring-2 focus:ring-green-200 text-base outline-none text-gray-700 py-1 px-3 leading-8 transition-colors duration-200 ease-in-out"
+                      onChange={(e) => {
+                        setUserInfo({
+                          ...userInfo,
+                          doctorProfile: {
+                            ...userInfo.doctorProfile,
+                            other_inportent_link: e.target.value,
+                          },
+                        });
+                      }}
+                    />
+                  </div>
+                </div>
+                <div className="p-2 w-1/2">
+                  <div className="relative">
+                    <label className="leading-7 text-sm text-gray-600">
+                      Description
+                    </label>
+                    <textarea
+                      type="text"
+                      value={userInfo?.doctorProfile?.description}
+                      className="w-full bg-gray-100 bg-opacity-50 rounded border border-gray-300 focus:border-green-500 focus:bg-white focus:ring-2 focus:ring-green-200 text-base outline-none text-gray-700 py-1 px-3 leading-8 transition-colors duration-200 ease-in-out"
+                      onChange={(e) => {
+                        setUserInfo({
+                          ...userInfo,
+                          doctorProfile: {
+                            ...userInfo.doctorProfile,
+                            description: e.target.value,
                           },
                         });
                       }}

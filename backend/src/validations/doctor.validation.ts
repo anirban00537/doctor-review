@@ -6,6 +6,12 @@ const DoctorProfile = {
     qualification: Joi.string().allow(null).required(),
     experienceYears: Joi.number().integer().allow(null).required(),
     clinicAddress: Joi.string().allow(null).required(),
+    education: Joi.string().allow(null).required(),
+    publication_link: Joi.string().allow(null).required(),
+    current_place: Joi.string().allow(null).required(),
+    country: Joi.string().allow(null).required(),
+    other_inportent_link: Joi.string().allow(null).required(),
+    description: Joi.string().allow(null).required(),
     doctor_id: Joi.number().integer().required()
   })
 };
