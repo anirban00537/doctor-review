@@ -16,10 +16,17 @@ router.post(
   validate(userValidation.updateUser),
   userController.editUser
 );
+router.post(
+  '/add-patient-history',
+  auth(),
+  validate(userValidation.addPatientHistorySchema),
+  userController.addPatientHistory
+);
 router.get('/service-details/:serviceId', userController.getServiceById);
 
 // doctorsServiceId;
 router.get('/get-user-apoinments', auth(), userController.getUserApoinments);
+router.get('/get-user-medical-history', auth(), userController.getUserMedicalHistory);
 router.post(
   '/add-apoinment',
   validate(userValidation.addApoinment),

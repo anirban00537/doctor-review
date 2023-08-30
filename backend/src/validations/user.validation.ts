@@ -39,6 +39,22 @@ const updateUser = {
     })
     .min(1)
 };
+const addPatientHistorySchema = Joi.object({
+  problem: Joi.string().required(),
+  diagnosis: Joi.string().allow(''),
+  treatment: Joi.string().allow(''),
+  date: Joi.date().iso().required(),
+  hospitalName: Joi.string().allow(''),
+  doctorName: Joi.string().allow(''),
+  notes: Joi.string().allow(''),
+  prescription: Joi.string().allow(''),
+  followUpDate: Joi.date().iso().allow(''),
+  followUpDoctor: Joi.string().allow(''),
+  isEmergency: Joi.boolean(),
+  isRecurring: Joi.boolean(),
+  isChronic: Joi.boolean(),
+  isCritical: Joi.boolean()
+});
 
 const deleteUser = {
   params: Joi.object().keys({
@@ -68,5 +84,6 @@ export default {
   updateUser,
   deleteUser,
   addApoinment,
-  addReview
+  addReview,
+  addPatientHistorySchema
 };

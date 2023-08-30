@@ -22,9 +22,28 @@ model User {
   user_appointments   Appointment[] @relation("User")
   doctor_appointments Appointment[] @relation("Doctor")
 
-  // One-to-one relation with DoctorProfile
+  patient_history PatientHistory[]
   doctorProfile   DoctorProfile?
-  doctorsServices DoctorsService[] // Added relationship to doctors services
+  doctorsServices DoctorsService[]
+}
+
+model PatientHistory {
+  id             Int       @id @default(autoincrement())
+  problem        String
+  diagnosis      String?
+  treatment      String?
+  date           DateTime
+  hospitalName   String? // Name of the hospital or healthcare facility
+  doctorName     String? // Name of the doctor who treated the patient
+  notes          String? // Additional notes about the history entry
+  followUpDate   DateTime? // Date for follow-up
+  followUpDoctor String? // Doctor's name for follow-up
+  isEmergency    Boolean   @default(false) // Whether the case was an emergency
+  isRecurring    Boolean   @default(false) // Whether the problem is recurring
+  isChronic      Boolean   @default(false) // Whether the problem is chronic
+  isCritical     Boolean   @default(false) // Whether the case was critical
+  user           User      @relation(fields: [userId], references: [id])
+  userId         Int
 }
 
 model DoctorProfile {

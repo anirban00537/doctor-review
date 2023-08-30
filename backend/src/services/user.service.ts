@@ -1,4 +1,12 @@
-import { User, Role, Prisma, Appointment, DoctorsService, Review } from '@prisma/client';
+import {
+  User,
+  Role,
+  Prisma,
+  Appointment,
+  DoctorsService,
+  Review,
+  PatientHistory
+} from '@prisma/client';
 import httpStatus from 'http-status';
 import prisma from '../client';
 import ApiError from '../utils/ApiError';
@@ -70,7 +78,54 @@ const queryUsers = async <Key extends keyof User>(
   });
   return users as Pick<User, Key>[];
 };
+const createPatientHistory = async (
+  problem: string,
+  diagnosis: string | null,
+  treatment: string | null,
+  date: Date,
+  hospitalName: string | null,
+  doctorName: string | null,
+  notes: string | null,
+  followUpDate: Date | null,
+  followUpDoctor: string | null,
+  isEmergency: boolean,
+  isRecurring: boolean,
+  isChronic: boolean,
+  isCritical: boolean,
+  userID: number
+): Promise<PatientHistory> => {
+  console.log(userID, 'problemaaaaaaaaaaaaa');
+  const parsedDate = new Date(date); // Parse date string to Date object
+  const parsedFollowUpDate = followUpDate ? new Date(followUpDate) : null; // P
+  const patientHistory = await prisma.patientHistory.create({
+    data: {
+      problem,
+      diagnosis,
+      treatment,
+      date: parsedDate, // Use the parsed date
+      hospitalName,
+      doctorName,
+      notes,
+      followUpDate: parsedFollowUpDate, // Use the parsed followUpDate
+      followUpDoctor,
+      isEmergency,
+      isRecurring,
+      isChronic,
+      isCritical,
+      userId: userID
+    }
+  });
 
+  return patientHistory;
+};
+const getMedicalHistory = async (userId: number): Promise<PatientHistory[]> => {
+  const response = await prisma.patientHistory.findMany({
+    where: {
+      userId: Number(userId)
+    }
+  });
+  return response;
+};
 const getUserById = async <Key extends keyof User>(
   id: number,
   keys: Key[] = [
@@ -261,5 +316,7 @@ export default {
   createAppointment,
   createDoctor,
   getServiceByIdService,
-  addReviewService
+  addReviewService,
+  createPatientHistory,
+  getMedicalHistory
 };

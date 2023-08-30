@@ -50,6 +50,24 @@ const getUserApoinments = catchAsync(async (req: Request, res: Response) => {
     return processException(res, error);
   }
 });
+
+const getUserMedicalHistory = catchAsync(async (req: Request, res: Response) => {
+  try {
+    const token = separateToken(req.headers.authorization);
+    if (!token) {
+      return errorResponse(res, 'Authorization header missing or invalid format', null);
+    }
+    const userID: number = await tokenService.verifyAccessTokenAndGetUserID(token);
+
+    const appointments = await userService.getMedicalHistory(userID);
+    if (!appointments) {
+      return errorResponse(res, 'Something went wrong!', null);
+    }
+    return successResponse(res, 'Appointment get successfully', appointments);
+  } catch (error) {
+    return processException(res, error);
+  }
+});
 const createAppointment = catchAsync(async (req: Request, res: Response) => {
   const { doctorId, date, reason, doctorsServiceId } = req.body;
   const token = separateToken(req.headers.authorization);
@@ -80,6 +98,55 @@ const createAppointment = catchAsync(async (req: Request, res: Response) => {
 
   return successResponse(res, 'Appointment created successfully', appointment);
 });
+const addPatientHistory = catchAsync(async (req: Request, res: Response) => {
+  try {
+    const {
+      problem,
+      diagnosis,
+      treatment,
+      date,
+      hospitalName,
+      doctorName,
+      notes,
+      followUpDate,
+      followUpDoctor,
+      isEmergency,
+      isRecurring,
+      isChronic,
+      isCritical
+    } = req.body;
+    const token = separateToken(req.headers.authorization);
+    if (!token) {
+      return errorResponse(res, 'Authorization header missing or invalid format', null);
+    }
+    const userID: number = await tokenService.verifyAccessTokenAndGetUserID(token);
+
+    const response = await userService.createPatientHistory(
+      problem,
+      diagnosis,
+      treatment,
+      date,
+      hospitalName,
+      doctorName,
+      notes,
+      followUpDate,
+      followUpDoctor,
+      isEmergency,
+      isRecurring,
+      isChronic,
+      isCritical,
+      userID
+    );
+
+    if (!response) {
+      return errorResponse(res, 'PAtient medical history add failed!', null);
+    }
+    return successResponse(res, 'Response successfully!', response);
+  } catch (error) {
+    console.log(error, 'error');
+    return errorResponse(res, String(error), null);
+  }
+});
 
 const addPhotoUrl = catchAsync(async (req: Request, res: Response) => {
   try {
@@ -102,7 +169,6 @@ const addPhotoUrl = catchAsync(async (req: Request, res: Response) => {
     let updatedProfile: any = await userService.updateUserById(userID, {
       photo_url: req.file.path
     });
-    console.log(user.photo_url, 'ssssssssssssssssssssss');
     let profileData = `localhost/3000/image/${updatedProfile.photo_url.split('/')[2]}`;
     updatedProfile.photo_url = profileData;
     return successResponse(res, 'Profile photo added successfully', updatedProfile);
@@ -214,6 +280,8 @@ export default {
   editUser,
   getUserApoinments,
   createAppointment,
+  getUserMedicalHistory,
   getServiceById,
-  addReview
+  addReview,
+  addPatientHistory
 };

@@ -1,15 +1,26 @@
+import AddPatientHistory from "@/components/add-patient-history";
 import Footer from "@/components/footer";
+import NoItemFound from "@/components/noItemFound";
+import PatientHistoryDetailsModal from "@/components/patient-history-details-modal";
 import Layout from "@/layout";
+import { getMedicalHistoryUser } from "@/service/user";
 import { SSRAuthCheck } from "@/utils/ssr";
+import moment from "moment";
 import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 
 const Profile = () => {
   const { user } = useSelector((state) => state.userInfo);
   const [userInfo, setUserInfo] = useState();
-
+  const [medicalHistory, setMedicalHistory] = useState([]);
+  const getMedicalHistoryData = async () => {
+    const { data } = await getMedicalHistoryUser();
+    console.log(data, "Tjos ");
+    setMedicalHistory(data);
+  };
   useEffect(() => {
     setUserInfo(user);
+    getMedicalHistoryData();
   }, [user]);
 
   // Helper function to format the join date
@@ -48,7 +59,7 @@ const Profile = () => {
           <p className="text-sm text-white">Manage your profile from here</p>
         </div>
       </div>
-      <section className="text-gray-600 body-font relative mb-40">
+      <section className="text-gray-600 body-font relative ">
         <div className="container px-5 py-14 mx-auto">
           <div className="flex flex-col text-center w-full mb-12">
             <div className="relative rounded-full w-24 h-24 mx-auto mb-4 border-4 border-green-500 overflow-hidden">
@@ -80,11 +91,13 @@ const Profile = () => {
             <h1 className="sm:text-3xl text-2xl font-medium title-font mb-4 text-gray-900">
               {userInfo?.name}
             </h1>
+            <AddPatientHistory getMedicalHistoryData={getMedicalHistoryData} />
+
             <p className="text-sm text-gray-500">
               Joined: {formatJoinDate(userInfo?.createdAt)}
             </p>
           </div>
-          <div className="lg:w-1/2 md:w-2/3 mx-auto">
+          <div className="">
             <div className="flex flex-wrap -m-2">
               <div className="p-2 w-1/2">
                 <div className="relative">
@@ -121,6 +134,62 @@ const Profile = () => {
           </div>
         </div>
       </section>
+      <div className="relative overflow-x-auto shadow-md sm:rounded-lg p-5 mb-40">
+        <table className="w-full text-sm text-left text-gray-500 dark:text-gray-400">
+          <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+            <tr>
+              <th scope="col" className="px-6 py-3">
+                Diagnosis
+              </th>
+              <th scope="col" className="px-6 py-3">
+                DoctorName
+              </th>
+              <th scope="col" className="px-6 py-3">
+                Follow Up Date
+              </th>
+              <th scope="col" className="px-6 py-3">
+                Hospital Name
+              </th>
+              <th scope="col" className="px-6 py-3">
+                Details
+              </th>
+            </tr>
+          </thead>
+
+          <tbody>
+            {medicalHistory?.map((history) => (
+              <tr className="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
+                <th
+                  scope="row"
+                  className="flex items-center px-6 py-4 text-gray-900 whitespace-nowrap dark:text-white"
+                >
+                  <div className="pl-3">
+                    <div className="text-base font-semibold">
+                      {history?.diagnosis}
+                    </div>
+                  </div>
+                </th>
+                <td className="px-6 py-4">
+                  {/* {moment(history?.doctorName).format("MMMM Do YYYY, h:mm:ss a")} */}
+                  {history?.doctorName}
+                </td>
+                <td className="px-6 py-4">
+                  {moment(history?.followUpDate).format(
+                    "MMMM Do YYYY, h:mm:ss a"
+                  )}
+                </td>
+                <td className="px-6 py-4">{history?.hospitalName}</td>
+                <td className="px-6 py-4">
+                  <PatientHistoryDetailsModal history={history} />
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+        {medicalHistory?.length <= 0 && (
+          <NoItemFound message={"No Service Found"} />
+        )}
+      </div>
       <Footer />
     </Layout>
   );
