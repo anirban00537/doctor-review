@@ -12,7 +12,12 @@ const registerDoctor = {
   body: Joi.object().keys({
     email: Joi.string().required().email(),
     password: Joi.string().required().custom(password),
-    name: Joi.string().required()
+    name: Joi.string().required(),
+    education: Joi.string().required(), // Validation for education field
+    publicationLink: Joi.string().required(), // Validation for publication link (URI format)
+    currentPlace: Joi.string().required(), // Validation for current place field
+    country: Joi.string().required(), // Validation for country field
+    otherImportantLink: Joi.string().required() // Validation for other important link (URI format)
   })
 };
 

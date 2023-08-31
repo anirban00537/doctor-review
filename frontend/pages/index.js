@@ -2,6 +2,7 @@ import Image from "next/image";
 import { Inter } from "next/font/google";
 import Navbar from "@/components/navbar";
 import Footer from "@/components/footer";
+import Link from "next/link";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -24,12 +25,12 @@ export default function Home() {
                   quisque ut interdum tincidunt duis.
                 </p>
                 <div className="mt-4 md:mt-8">
-                  <a
-                    href="#"
+                  <Link
+                    href="/doctor-register"
                     className="inline-block rounded border border-white bg-white px-12 py-3 text-sm font-medium text-blue-500 transition hover:bg-transparent hover:text-white focus:outline-none focus:ring focus:ring-yellow-400"
                   >
-                    Get Started Today
-                  </a>
+                    Register as a doctor
+                  </Link>
                 </div>
               </div>
             </div>

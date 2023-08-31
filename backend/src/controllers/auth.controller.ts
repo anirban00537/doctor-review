@@ -3,7 +3,7 @@ import catchAsync from '../utils/catchAsync';
 import { authService, userService, tokenService, emailService } from '../services';
 import exclude from '../utils/exclude';
 import { User } from '@prisma/client';
-import { successResponse, errorResponse } from '../utils/common';
+import { successResponse, errorResponse, processException } from '../utils/common';
 import { DOCTOR } from '../utils/core-constants';
 
 const register = catchAsync(async (req, res) => {
@@ -12,17 +12,40 @@ const register = catchAsync(async (req, res) => {
     // throw new ApiError(httpStatus.BAD_REQUEST, 'Email already taken');
     return errorResponse(res, 'Email already taken');
   }
+
   const user = await userService.createUser(email, password);
   const userWithoutPassword = exclude(user, ['password', 'createdAt', 'updatedAt']);
   const tokens = await tokenService.generateAuthTokens(user);
   successResponse(res, 'User registered successfully', { user: userWithoutPassword, tokens });
 });
 const registerDoctor = catchAsync(async (req, res) => {
-  const { email, password, name } = req.body;
-  const user = await userService.createDoctor(email, password, name);
-  const userWithoutPassword = exclude(user, ['password', 'createdAt', 'updatedAt']);
-  const tokens = await tokenService.generateAuthTokens(user);
-  successResponse(res, 'User registered successfully', { user: userWithoutPassword, tokens });
+  try {
+    const {
+      email,
+      password,
+      name,
+      education,
+      publicationLink,
+      currentPlace,
+      country,
+      otherImportantLink
+    } = req.body;
+    const user = await userService.createDoctor(
+      email,
+      password,
+      name,
+      education,
+      publicationLink,
+      currentPlace,
+      country,
+      otherImportantLink
+    );
+    const userWithoutPassword = exclude(user, ['password', 'createdAt', 'updatedAt']);
+    const tokens = await tokenService.generateAuthTokens(user);
+    successResponse(res, 'User registered successfully', { user: userWithoutPassword, tokens });
+  } catch (error) {
+    return processException(res, String(error));
+  }
 });
 
 const login = catchAsync(async (req, res) => {

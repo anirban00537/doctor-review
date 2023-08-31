@@ -30,18 +30,29 @@ const createUser = async (
 const createDoctor = async (
   email: string,
   password: string,
-  name?: string,
-  role: Role = Role.DOCTOR
+  education: string, // Moved up, required parameter
+  publicationLink: string,
+  currentPlace: string,
+  country: string,
+  otherImportantLink: string,
+  name?: string // Moved down, optional parameter
 ): Promise<User> => {
-  if (await getUserByEmail(email)) {
-    throw new ApiError(httpStatus.BAD_REQUEST, 'Email already taken');
-  }
+
   return prisma.user.create({
     data: {
       email,
       name,
       password: await encryptPassword(password),
-      role
+      role: Role.DOCTOR,
+      doctorProfile: {
+        create: {
+          education: education,
+          publication_link: publicationLink,
+          current_place: currentPlace,
+          country,
+          other_inportent_link: otherImportantLink
+        }
+      }
     }
   });
 };

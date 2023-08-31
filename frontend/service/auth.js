@@ -8,11 +8,25 @@ export const loginApi = async (email, password) => {
   return data;
 };
 
-export const RegisterApi = async (email, password, name) => {
-  const { data } = await request.post("/auth/register", {
+export const RegisterDoctorApi = async (
+  email,
+  password,
+  name,
+  education,
+  publicationLink,
+  currentPlace,
+  country,
+  otherImportantLink
+) => {
+  const { data } = await request.post("/auth/register-doctor", {
     email: email,
     password: password,
     name: name,
+    education: education,
+    publicationLink: publicationLink,
+    currentPlace: currentPlace,
+    country: country,
+    otherImportantLink,
   });
   return data;
 };
