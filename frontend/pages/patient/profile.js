@@ -3,21 +3,62 @@ import Footer from "@/components/footer";
 import NoItemFound from "@/components/noItemFound";
 import PatientHistoryDetailsModal from "@/components/patient-history-details-modal";
 import Layout from "@/layout";
-import { getMedicalHistoryUser } from "@/service/user";
+import { doctorProfileEdit } from "@/service/doctor";
+import { getMedicalHistoryUser, profileEdit } from "@/service/user";
 import { SSRAuthCheck } from "@/utils/ssr";
 import moment from "moment";
 import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
+import { toast } from "react-toastify";
 
 const Profile = () => {
   const { user } = useSelector((state) => state.userInfo);
-  const [userInfo, setUserInfo] = useState();
+  const [userInfo, setUserInfo] = useState(user);
   const [medicalHistory, setMedicalHistory] = useState([]);
+  const [editedUserInfo, setEditedUserInfo] = useState({
+    name: userInfo?.name,
+    age: userInfo?.age,
+    sex: userInfo?.sex,
+  });
+
   const getMedicalHistoryData = async () => {
     const { data } = await getMedicalHistoryUser();
     console.log(data, "Tjos ");
     setMedicalHistory(data);
   };
+
+  useEffect(() => {
+    setMedicalHistory([]); // Resetting medicalHistory on user change
+    setUserInfo(user);
+    setEditedUserInfo({
+      name: userInfo?.name,
+      age: userInfo?.age,
+      sex: userInfo?.sex,
+    });
+    getMedicalHistoryData();
+  }, [user]);
+
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setEditedUserInfo((prevUserInfo) => ({
+      ...prevUserInfo,
+      [name]: value,
+    }));
+  };
+
+  const editProfile = async () => {
+    const response = await profileEdit(
+      editedUserInfo.sex,
+      editedUserInfo.age,
+      editedUserInfo.name
+    );
+    if (response.success) {
+      toast.success(response.message);
+    } else {
+      toast.error(response.message);
+    }
+  };
+
   useEffect(() => {
     setUserInfo(user);
     getMedicalHistoryData();
@@ -106,9 +147,9 @@ const Profile = () => {
                   </label>
                   <input
                     type="text"
-                    value={userInfo?.name}
+                    value={editedUserInfo?.name}
                     className="w-full bg-gray-100 bg-opacity-50 rounded border border-gray-300 focus:border-green-500 focus:bg-white focus:ring-2 focus:ring-green-200 text-base outline-none text-gray-700 py-1 px-3 leading-8 transition-colors duration-200 ease-in-out"
-                    readOnly
+                    onChange={handleInputChange}
                   />
                 </div>
               </div>
@@ -122,11 +163,54 @@ const Profile = () => {
                     value={userInfo?.email}
                     className="w-full bg-gray-100 bg-opacity-50 rounded border border-gray-300 focus:border-green-500 focus:bg-white focus:ring-2 focus:ring-green-200 text-base outline-none text-gray-700 py-1 px-3 leading-8 transition-colors duration-200 ease-in-out"
                     readOnly
+                    onChange={handleInputChange}
                   />
                 </div>
               </div>
+              <div className="p-2 w-1/2">
+                <label
+                  htmlFor="Age"
+                  className="block text-sm font-medium text-gray-700"
+                >
+                  Age
+                </label>
+                <input
+                  type="number"
+                  id="Age"
+                  name="age"
+                  value={editedUserInfo?.age}
+                  className="mt-1 w-full rounded-md border-gray-200 bg-white text-sm text-gray-700 shadow-sm"
+                  onChange={handleInputChange}
+                />
+              </div>
+
+              {/* New sex select input field */}
+              <div className="p-2 w-1/2">
+                <label
+                  htmlFor="Sex"
+                  className="block text-sm font-medium text-gray-700"
+                >
+                  Sex
+                </label>
+                <select
+                  id="Sex"
+                  name="sex"
+                  value={editedUserInfo?.sex}
+                  onChange={handleInputChange}
+                  className="mt-1 w-full rounded-md border-gray-200 bg-white text-sm text-gray-700 shadow-sm"
+                  readOnly
+                >
+                  <option value="">Select Sex</option>
+                  <option value="MALE">MALE</option>
+                  <option value="FEMALE">FEMALE</option>
+                  <option value="OTHER">OTHER</option>
+                </select>
+              </div>
               <div className="p-2 w-full">
-                <button className="flex mx-auto text-white bg-green-500 border-0 py-2 px-8 focus:outline-none hover:bg-green-600 rounded text-lg">
+                <button
+                  className="flex mx-auto text-white bg-green-500 border-0 py-2 px-8 focus:outline-none hover:bg-green-600 rounded text-lg"
+                  onClick={editProfile}
+                >
                   Save
                 </button>
               </div>

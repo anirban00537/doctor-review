@@ -5,7 +5,9 @@ const register = {
   body: Joi.object().keys({
     email: Joi.string().required().email(),
     password: Joi.string().required().custom(password),
-    name: Joi.string().required()
+    name: Joi.string().required(),
+    age: Joi.number().required(),
+    sex: Joi.string().required()
   })
 };
 const registerDoctor = {
@@ -13,6 +15,8 @@ const registerDoctor = {
     email: Joi.string().required().email(),
     password: Joi.string().required().custom(password),
     name: Joi.string().required(),
+    sex: Joi.string().required(),
+    age: Joi.number().required(),
     education: Joi.string().required(), // Validation for education field
     publicationLink: Joi.string().required(), // Validation for publication link (URI format)
     currentPlace: Joi.string().required(), // Validation for current place field

@@ -9,19 +9,24 @@ import { getDoctorProfileById } from '../services/doctors.service';
 import prisma from '../client';
 
 const createUser = catchAsync(async (req, res) => {
-  const { email, password, name, role } = req.body;
-  const user: User = await userService.createUser(email, password, name, role);
+  const { email, password, age, sex, name, role } = req.body;
+  const user: User = await userService.createUser(email, password, age, sex, name, role);
   return successResponse(res, 'User created successfully', user);
 });
 const editUser = catchAsync(async (req: Request, res: Response) => {
   try {
-    const { userId } = req.params;
+    const token = separateToken(req.headers.authorization);
+    if (!token) {
+      return errorResponse(res, 'Authorization header missing or invalid format', null);
+    }
+    const userID: number = await tokenService.verifyAccessTokenAndGetUserID(token);
+
     const userProfile: User = req.body;
-    const user: User | null = await userService.getUserById(Number(userId));
+    const user: User | null = await userService.getUserById(Number(userID));
     if (!user) {
       return errorResponse(res, 'Invalid user id!', null);
     }
-    const updatedUser = await userService.updateUserById(Number(userId), userProfile);
+    const updatedUser = await userService.updateUserById(Number(userID), userProfile);
     if (updatedUser) {
       return successResponse(res, 'Profile edited successfully!', updatedUser);
     }

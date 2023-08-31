@@ -7,3 +7,5 @@ export const CANCELLED = 'CANCELLED';
 export const COMPLETED = 'COMPLETED';
 
 
+export const MALE= 'MALE';
+export const FEMALE = 'FEMALE';

@@ -4,8 +4,6 @@ import Navbar from "@/components/navbar";
 import { getServiceDetails } from "@/service/user";
 import { useRouter } from "next/router";
 import React, { useEffect, useState } from "react";
-import { toast } from "react-toastify";
-import { FaStar, FaStarHalfAlt } from "react-icons/fa"; // Import the star icons from react-icons
 
 const ServiceDetails = () => {
   const [details, setDetails] = useState();
@@ -33,6 +31,7 @@ const ServiceDetails = () => {
               <h1 className="text-gray-900 text-3xl title-font font-medium mb-4">
                 {details?.name}
               </h1>
+
               <div className="flex mb-4">
                 <a className="flex-grow text-green-500 border-b-2 border-green-500 py-2 text-lg px-1">
                   Description
@@ -42,6 +41,18 @@ const ServiceDetails = () => {
                 <span className="text-gray-500">Doctor Email</span>
                 <span className="ml-auto text-gray-900">
                   {details?.doctor?.email}
+                </span>
+              </div>
+              <div className="flex border-gray-200 border-b py-2">
+                <span className="text-gray-500">Sex</span>
+                <span className="ml-auto text-gray-900">
+                  {details?.doctor?.sex}
+                </span>
+              </div>
+              <div className="flex border-gray-200 border-b py-2">
+                <span className="text-gray-500">Age</span>
+                <span className="ml-auto text-gray-900">
+                  {details?.doctor?.age}
                 </span>
               </div>
               <div className="flex border-gray-200 border-b py-2">

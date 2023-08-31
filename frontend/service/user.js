@@ -60,6 +60,15 @@ export const getMedicalHistoryUser = async () => {
   const { data } = await request.get("/user/get-user-medical-history");
   return data;
 };
+
+export const profileEdit = async (sex, age, name) => {
+  const { data } = await request.post(`/user/profile/edit`, {
+    sex,
+    age,
+    name,
+  });
+  return data;
+};
 export const addAppointment = async (
   doctorId,
   date,

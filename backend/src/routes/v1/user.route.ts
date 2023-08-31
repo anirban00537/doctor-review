@@ -11,8 +11,8 @@ const router = express.Router();
 router.get('/profile', auth(), userController.getUserProfile);
 router.post('/add-profile-photo', auth(), imageUpload.single('photo'), userController.addPhotoUrl);
 router.post(
-  '/profile/edit/:userId',
-  auth(),
+  '/profile/edit',
+
   validate(userValidation.updateUser),
   userController.editUser
 );

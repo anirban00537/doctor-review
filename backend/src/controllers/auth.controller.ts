@@ -7,13 +7,13 @@ import { successResponse, errorResponse, processException } from '../utils/commo
 import { DOCTOR } from '../utils/core-constants';
 
 const register = catchAsync(async (req, res) => {
-  const { email, password } = req.body;
+  const { email, password, age, sex, name } = req.body;
   if (await userService.getUserByEmail(email)) {
     // throw new ApiError(httpStatus.BAD_REQUEST, 'Email already taken');
     return errorResponse(res, 'Email already taken');
   }
 
-  const user = await userService.createUser(email, password);
+  const user = await userService.createUser(email, password, age, sex, name);
   const userWithoutPassword = exclude(user, ['password', 'createdAt', 'updatedAt']);
   const tokens = await tokenService.generateAuthTokens(user);
   successResponse(res, 'User registered successfully', { user: userWithoutPassword, tokens });
@@ -28,17 +28,21 @@ const registerDoctor = catchAsync(async (req, res) => {
       publicationLink,
       currentPlace,
       country,
-      otherImportantLink
+      otherImportantLink,
+      age,
+      sex
     } = req.body;
     const user = await userService.createDoctor(
       email,
       password,
-      name,
       education,
       publicationLink,
       currentPlace,
       country,
-      otherImportantLink
+      otherImportantLink,
+      age,
+      sex,
+      name
     );
     const userWithoutPassword = exclude(user, ['password', 'createdAt', 'updatedAt']);
     const tokens = await tokenService.generateAuthTokens(user);

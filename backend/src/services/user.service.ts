@@ -11,11 +11,14 @@ import httpStatus from 'http-status';
 import prisma from '../client';
 import ApiError from '../utils/ApiError';
 import { encryptPassword } from '../utils/encryption';
+import { FEMALE, MALE } from '../utils/core-constants';
 
 const createUser = async (
   email: string,
   password: string,
-  name?: string,
+  age: number,
+  sex: string,
+  name: string,
   role: Role = Role.USER
 ): Promise<User> => {
   return prisma.user.create({
@@ -23,7 +26,9 @@ const createUser = async (
       email,
       name,
       password: await encryptPassword(password),
-      role
+      role,
+      sex: sex === MALE ? MALE : FEMALE,
+      age: age
     }
   });
 };
@@ -35,15 +40,18 @@ const createDoctor = async (
   currentPlace: string,
   country: string,
   otherImportantLink: string,
-  name?: string // Moved down, optional parameter
+  age: number,
+  sex: string,
+  name: string // Moved down, optional parameter
 ): Promise<User> => {
-
   return prisma.user.create({
     data: {
       email,
       name,
       password: await encryptPassword(password),
       role: Role.DOCTOR,
+      sex: sex === MALE ? MALE : FEMALE,
+      age: age,
       doctorProfile: {
         create: {
           education: education,
@@ -285,7 +293,8 @@ const updateUserById = async <Key extends keyof User>(
     data: {
       email: updateBody.email,
       name: updateBody.name,
-      photo_url: updateBody.photo_url
+      age: Number(updateBody.age),
+      sex: updateBody.sex
     },
     select: keys.reduce((obj, k) => ({ ...obj, [k]: true }), {})
   });

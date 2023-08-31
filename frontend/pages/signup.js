@@ -2,15 +2,20 @@ import React, { useState } from "react";
 import Link from "next/link";
 import { RegisterApi } from "@/service/auth";
 import { toast } from "react-toastify";
+import { useRouter } from "next/router";
 const Signup = () => {
   const [name, setName] = useState("");
   const [password, setPassword] = useState("");
   const [email, setEmail] = useState("");
+  const [age, setAge] = useState(0); // New age state
+  const [sex, setSex] = useState(""); // New sex state
+  const router = useRouter();
 
   const SignupSubmit = async (e) => {
     e.preventDefault();
-    const response = await RegisterApi(email, password, name);
+    const response = await RegisterApi(email, password, name, age, sex);
     if (response.success) {
+      router.push("/login");
       toast.success(response.message);
     } else {
       toast.error(response.message);
@@ -68,7 +73,44 @@ const Signup = () => {
                   className="mt-1 w-full rounded-md border-gray-200 bg-white text-sm text-gray-700 shadow-sm"
                 />
               </div>
+              <div className="col-span-6">
+                <label
+                  htmlFor="Age"
+                  className="block text-sm font-medium text-gray-700"
+                >
+                  Age
+                </label>
+                <input
+                  type="number"
+                  id="Age"
+                  name="age"
+                  value={age}
+                  onChange={(e) => setAge(e.target.value)}
+                  className="mt-1 w-full rounded-md border-gray-200 bg-white text-sm text-gray-700 shadow-sm"
+                />
+              </div>
 
+              {/* New sex select input field */}
+              <div className="col-span-6">
+                <label
+                  htmlFor="Sex"
+                  className="block text-sm font-medium text-gray-700"
+                >
+                  Sex
+                </label>
+                <select
+                  id="Sex"
+                  name="sex"
+                  value={sex}
+                  onChange={(e) => setSex(e.target.value)}
+                  className="mt-1 w-full rounded-md border-gray-200 bg-white text-sm text-gray-700 shadow-sm"
+                >
+                  <option value="">Select Sex</option>
+                  <option value="MALE">MALE</option>
+                  <option value="FEMALE">FEMALE</option>
+                  <option value="OTHER">OTHER</option>
+                </select>
+              </div>
               <div className="col-span-6">
                 <label
                   htmlFor="Email"

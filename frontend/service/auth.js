@@ -7,6 +7,16 @@ export const loginApi = async (email, password) => {
   });
   return data;
 };
+export const RegisterApi = async (email, password, name, age, sex) => {
+  const { data } = await request.post("/auth/register", {
+    email: email,
+    password: password,
+    name: name,
+    age: age,
+    sex: sex,
+  });
+  return data;
+};
 
 export const RegisterDoctorApi = async (
   email,
@@ -16,7 +26,9 @@ export const RegisterDoctorApi = async (
   publicationLink,
   currentPlace,
   country,
-  otherImportantLink
+  otherImportantLink,
+  sex,
+  age
 ) => {
   const { data } = await request.post("/auth/register-doctor", {
     email: email,
@@ -27,6 +39,8 @@ export const RegisterDoctorApi = async (
     currentPlace: currentPlace,
     country: country,
     otherImportantLink,
+    age: age,
+    sex: sex,
   });
   return data;
 };
