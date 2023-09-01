@@ -6,6 +6,13 @@ export const getAllServiceList = async () => {
   return data;
 };
 
+export const serviceSearch = async (query) => {
+  const { data } = await request.post(`/doctor/service/search`, {
+    query,
+  });
+  return data;
+};
+
 export const getAllDoctorServiceList = async () => {
   const { data } = await request.get(`/doctor/get-all-doctor-service-list
 `);

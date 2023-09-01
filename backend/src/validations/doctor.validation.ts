@@ -15,6 +15,11 @@ const DoctorProfile = {
     doctor_id: Joi.number().integer().required()
   })
 };
+const search = {
+  body: Joi.object().keys({
+    query: Joi.string().required()
+  })
+};
 
 const DoctorService = {
   body: Joi.object().keys({
@@ -31,5 +36,6 @@ const DoctorApoinmentStatusChange = {
 export default {
   DoctorProfile,
   DoctorService,
-  DoctorApoinmentStatusChange
+  DoctorApoinmentStatusChange,
+  search
 };

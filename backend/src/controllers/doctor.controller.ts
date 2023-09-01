@@ -12,7 +12,8 @@ import {
   getAllDoctorServiceListService,
   getAllDoctorsList,
   getAllServiceList,
-  getDoctorProfileById
+  getDoctorProfileById,
+  searchFunction
 } from '../services/doctors.service';
 import { errorResponse, processException, separateToken, successResponse } from '../utils/common';
 import { tokenService } from '../services';
@@ -32,6 +33,19 @@ const editCreateDoctor = catchAsync(async (req: Request, res: Response) => {
     return errorResponse(res, 'Failed to edit profile!', null);
   } catch (error) {
     return errorResponse(res, 'An error occurred!', null);
+  }
+});
+const search = catchAsync(async (req: Request, res: Response) => {
+  try {
+    const { query } = req.body;
+    console.log(query, 'query');
+    const responnse = await searchFunction(query);
+    if (!responnse) {
+      return errorResponse(res, 'No result found', null);
+    }
+    return successResponse(res, 'Search Found successfully!', responnse);
+  } catch (error) {
+    processException(res, error);
   }
 });
 const delete_service = catchAsync(async (req: Request, res: Response) => {
@@ -208,5 +222,6 @@ export default {
   getAllDoctorAppointments,
   changeAppointmentStatus,
   delete_service,
-  getAllDoctorServiceListController
+  getAllDoctorServiceListController,
+  search
 };

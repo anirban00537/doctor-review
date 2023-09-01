@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import DoctorCard from "@/components/doctor-cards";
 import Footer from "@/components/footer";
 import Navbar from "@/components/navbar";
-import { getAllServiceList } from "@/service/doctor";
+import { getAllServiceList, serviceSearch } from "@/service/doctor";
 import { useSelector } from "react-redux";
 import NoItemFound from "@/components/noItemFound";
 
@@ -27,8 +27,9 @@ const DoctorsList = () => {
   };
 
   const filteredLists = lists.filter((item) => {
+    console.log(item.doctor.doctorProfile.specialization, "item");
     return (
-      item.doctor.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      item.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
       item.doctor.doctorProfile.specialization
         .toLowerCase()
         .includes(searchQuery.toLowerCase())
