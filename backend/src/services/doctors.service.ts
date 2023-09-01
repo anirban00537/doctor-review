@@ -75,7 +75,8 @@ const getAllDoctorAppointmentsService = async (
         select: {
           name: true,
           email: true,
-          photo_url: true
+          photo_url: true,
+          patient_history: true
         }
       }
     },

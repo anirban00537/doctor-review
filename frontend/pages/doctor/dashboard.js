@@ -1,5 +1,6 @@
 import NoItemFound from "@/components/noItemFound";
 import Pagination from "@/components/pagination";
+import ShowPatientHistory from "@/components/showPatientHistory";
 import Layout from "@/layout";
 import DoctorLayout from "@/layout/doctor.layout";
 import {
@@ -99,6 +100,9 @@ const Dashboard = () => {
               <th scope="col" className="px-6 py-3">
                 Appointment Status
               </th>
+              <th scope="col" className="px-6 py-3">
+                Details
+              </th>
             </tr>
           </thead>
 
@@ -165,6 +169,11 @@ const Dashboard = () => {
                       ></div>
                     </div>
                   </div>
+                </td>
+                <td>
+                  <ShowPatientHistory
+                    details={appointment?.user?.patient_history}
+                  />
                 </td>
               </tr>
             ))}
