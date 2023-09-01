@@ -52,10 +52,10 @@ const DoctorsList = () => {
         >
           <div>
             <h3 className="font-semibold text-xl md:text-2xl">
-              Welcome to the patient dashboard
+              Welcome
             </h3>
             <p className="text-sm md:text-base">
-              Manage your appointments and more.
+              Search for doctor service
             </p>
           </div>
         </div>

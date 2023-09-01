@@ -76,7 +76,9 @@ const getAllDoctorAppointmentsService = async (
           name: true,
           email: true,
           photo_url: true,
-          patient_history: true
+          patient_history: true,
+          age: true,
+          sex: true
         }
       }
     },

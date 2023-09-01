@@ -5,7 +5,7 @@ import { FaStar, FaStarHalfAlt } from "react-icons/fa";
 import ReviewList from "./reviewComponent";
 import { useRouter } from "next/router";
 
-const ShowPatientHistory = ({ details }) => {
+const ShowPatientHistory = ({ details, userDetails }) => {
   const [openModal, setOpenModal] = useState(false);
   const props = { openModal, setOpenModal };
 
@@ -26,16 +26,44 @@ const ShowPatientHistory = ({ details }) => {
         </Modal.Header>
         <Modal.Body className="bg-white p-6 rounded-lg shadow-md">
           <div className="space-y-4">
+            {/* User Details Section */}
+            <div className="bg-gray-200 p-4 rounded-lg shadow-md">
+              <h2 className="text-xl font-semibold text-blue-500">
+                User Details
+              </h2>
+              <table className="table-auto w-full mt-4">
+                <tbody>
+                  <tr>
+                    <td className="font-semibold">Name:</td>
+                    <td>{userDetails.name}</td>
+                  </tr>
+                  <tr>
+                    <td className="font-semibold">Email:</td>
+                    <td>{userDetails.email}</td>
+                  </tr>
+                  <tr>
+                    <td className="font-semibold">Age:</td>
+                    <td>{userDetails.age}</td>
+                  </tr>
+                  <tr>
+                    <td className="font-semibold">Sex:</td>
+                    <td>{userDetails.sex}</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+
             {details.map((item, index) => (
               <div
                 key={index}
-                className="border border-gray-200 p-4 rounded-lg shadow-sm"
+                className="border border-gray-200 p-4 rounded-lg shadow-md"
               >
                 <h2 className="text-xl font-semibold text-blue-500">
                   History {index + 1}
                 </h2>
                 <table className="table-auto w-full mt-4">
                   <tbody>
+                    {/* Patient History Details */}
                     <tr>
                       <td className="font-semibold">Date:</td>
                       <td>{moment(item.date).format("YYYY-MM-DD")}</td>

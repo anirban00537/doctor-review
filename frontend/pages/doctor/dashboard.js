@@ -1,6 +1,6 @@
 import NoItemFound from "@/components/noItemFound";
 import Pagination from "@/components/pagination";
-import ShowPatientHistory from "@/components/showPatientHistory";
+import ShowPatientHistory from "@/components/AppointmentDetails";
 import Layout from "@/layout";
 import DoctorLayout from "@/layout/doctor.layout";
 import {
@@ -173,6 +173,7 @@ const Dashboard = () => {
                 <td>
                   <ShowPatientHistory
                     details={appointment?.user?.patient_history}
+                    userDetails={appointment?.user}
                   />
                 </td>
               </tr>
