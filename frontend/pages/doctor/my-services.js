@@ -1,7 +1,9 @@
 import NoItemFound from "@/components/noItemFound";
+import ShowReviews from "@/components/showReviews";
 import DoctorLayout from "@/layout/doctor.layout";
 import {
   ServiceDelete,
+  getAllDoctorReview,
   getAllDoctorServiceList,
   getAllServiceList,
 } from "@/service/doctor";
@@ -12,7 +14,7 @@ import { toast } from "react-toastify";
 const myServices = () => {
   const [data, setdata] = useState([]);
   const getAllServices = async (page) => {
-    const response = await getAllDoctorServiceList();
+    const response = await getAllDoctorReview();
     setdata(response?.data);
   };
   const handleDeleteService = async (serviceId) => {
@@ -85,6 +87,9 @@ const myServices = () => {
                   >
                     Delete
                   </button>
+                </td>
+                <td className="px-6 py-4">
+                  <ShowReviews service={service} />
                 </td>
               </tr>
             ))}

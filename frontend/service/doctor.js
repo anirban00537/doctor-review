@@ -18,6 +18,11 @@ export const getAllDoctorServiceList = async () => {
 `);
   return data;
 };
+export const getAllDoctorReview = async () => {
+  const { data } = await request.get(`/doctor/get-all-doctor-reviews
+`);
+  return data;
+};
 export const getDoctorAppointments = async (page, limit, search) => {
   if (search) {
     const { data } = await request.get(

@@ -13,6 +13,7 @@ import {
   getAllDoctorsList,
   getAllServiceList,
   getDoctorProfileById,
+  getDoctorReview,
   searchFunction
 } from '../services/doctors.service';
 import { errorResponse, processException, separateToken, successResponse } from '../utils/common';
@@ -129,8 +130,6 @@ const getAllDoctorAppointments = catchAsync(async (req: Request, res: Response) 
 
 const getAllDoctorServiceListController = catchAsync(async (req: Request, res: Response) => {
   try {
-    const { page, limit } = req.query;
-
     const token = separateToken(req.headers.authorization);
     if (!token) {
       return errorResponse(res, 'Authorization header missing or invalid format', null);
@@ -144,6 +143,28 @@ const getAllDoctorServiceListController = catchAsync(async (req: Request, res: R
     const response = await getAllDoctorServiceListService(Number(DoctorID));
     if (response) {
       return successResponse(res, 'Doctors appointments retrieved successfully', response);
+    }
+    return errorResponse(res, 'Something went wrong', null);
+  } catch (error) {
+    return errorResponse(res, String(error), null);
+  }
+});
+const getAllDoctorReviews = catchAsync(async (req: Request, res: Response) => {
+  try {
+    const token = separateToken(req.headers.authorization);
+    if (!token) {
+      return errorResponse(res, 'Authorization header missing or invalid format', null);
+    }
+    const DoctorID: number = await tokenService.verifyAccessTokenAndGetUserID(token);
+    console.log(DoctorID, 'DoctorID');
+    const doctorProfile = await getDoctorProfileById(Number(DoctorID));
+
+    if (!doctorProfile) {
+      return errorResponse(res, 'Profile not found', null);
+    }
+    const response = await getDoctorReview(Number(DoctorID));
+    if (response) {
+      return successResponse(res, 'Doctors review retrieved successfully', response);
     }
     return errorResponse(res, 'Something went wrong', null);
   } catch (error) {
@@ -223,5 +244,6 @@ export default {
   changeAppointmentStatus,
   delete_service,
   getAllDoctorServiceListController,
-  search
+  search,
+  getAllDoctorReviews
 };

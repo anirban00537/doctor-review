@@ -120,6 +120,22 @@ const getAllDoctorServiceListService = async (
 
   return DoctorServiceRes;
 };
+const getDoctorReview = async (doctorId: number) => {
+  const reviewList = await prisma.doctorsService.findMany({
+    where: {
+      doctorId: doctorId
+    },
+    include: {
+      review: {
+        include: {
+          user: true
+        }
+      }
+    }
+  });
+
+  return reviewList;
+};
 const getAllDoctorsList = async () => {
   const doctorsList = await prisma.user.findMany({
     where: {
@@ -152,8 +168,7 @@ const getAllServiceList = async (): Promise<DoctorsService[] | null> => {
           doctorProfile: {
             select: {
               clinicAddress: true,
-              specialization: true,
-              
+              specialization: true
             }
           }
         }
@@ -301,7 +316,6 @@ const searchFunction = async (query: string): Promise<DoctorsService[] | null> =
   return updatedAppointments;
 };
 
-
 const updateDoctorService = async (
   serviceId: number,
   dataToUpdate: Partial<DoctorsService>
@@ -350,5 +364,6 @@ export {
   FindServiceWithIdAndDoctorID,
   deleteService,
   getAllDoctorServiceListService,
-  searchFunction
+  searchFunction,
+  getDoctorReview
 };
