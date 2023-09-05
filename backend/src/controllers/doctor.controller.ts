@@ -53,20 +53,20 @@ const delete_service = catchAsync(async (req: Request, res: Response) => {
   try {
     const { service_id } = req.params;
     const token = separateToken(req.headers.authorization);
-    if (!token) {
-      return errorResponse(res, 'Authorization header missing or invalid format', null);
-    }
-    const DoctorID: number = await tokenService.verifyAccessTokenAndGetUserID(token);
+    // if (!token) {
+    //   return errorResponse(res, 'Authorization header missing or invalid format', null);
+    // }
+    // const DoctorID: number = await tokenService.verifyAccessTokenAndGetUserID(token);
 
-    const serviceFound = await FindServiceWithIdAndDoctorID(Number(DoctorID), Number(service_id));
-    if (serviceFound) {
-      const response = await deleteService(Number(service_id));
-      if (response) {
-        return successResponse(res, 'Service Deleted Successfully', null);
-      } else {
-        return errorResponse(res, 'Service deleted failed', null);
-      }
+    // const serviceFound = await FindServiceWithIdAndDoctorID(Number(DoctorID), Number(service_id));
+    // if (serviceFound) {
+    const response = await deleteService(Number(service_id));
+    if (response) {
+      return successResponse(res, 'Service Deleted Successfully', null);
+    } else {
+      return errorResponse(res, 'Service deleted failed', null);
     }
+    // }
     return errorResponse(res, 'Service deleted failed', null);
   } catch (error) {
     return errorResponse(res, String(error), null);

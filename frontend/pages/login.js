@@ -3,7 +3,7 @@ import Link from "next/link";
 import { loginApi } from "@/service/auth";
 import { toast } from "react-toastify";
 import Cookie from "js-cookie";
-import { USER } from "@/utils/core-constants";
+import { ADMIN, USER } from "@/utils/core-constants";
 import { useRouter } from "next/router";
 
 const login = () => {
@@ -19,6 +19,8 @@ const login = () => {
       Cookie.set("token", response?.data?.tokens?.access?.token);
       if (response?.data?.user?.role === USER) {
         router.push("/patient/dashboard");
+      } else if (response?.data?.user?.role === ADMIN) {
+        router.push("/admin/dashboard");
       } else {
         router.push("/doctor/dashboard");
       }

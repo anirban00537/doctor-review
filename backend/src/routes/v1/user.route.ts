@@ -9,6 +9,7 @@ import validate from '../../middlewares/validate';
 const router = express.Router();
 
 router.get('/profile', auth(), userController.getUserProfile);
+router.get('/get-all-users', auth(), userController.getAllUsers);
 router.post('/add-profile-photo', auth(), imageUpload.single('photo'), userController.addPhotoUrl);
 router.post(
   '/profile/edit',
@@ -23,6 +24,7 @@ router.post(
   userController.addPatientHistory
 );
 router.get('/service-details/:serviceId', userController.getServiceById);
+router.delete('/delete/:userId', userController.deleteUserbyId);
 
 // doctorsServiceId;
 router.get('/get-user-apoinments', auth(), userController.getUserApoinments);

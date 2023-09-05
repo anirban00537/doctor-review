@@ -6,6 +6,16 @@ export const getUserAppointments = async (page, limit) => {
   );
   return data;
 };
+// /get-all-users
+export const getAllUsers = async () => {
+  const { data } = await request.get(`/user/get-all-users`);
+  return data;
+};
+// /delete/:userId
+export const deleteUser = async (userId) => {
+  const { data } = await request.delete(`/user/delete/${userId}`);
+  return data;
+};
 // /add-patient-history
 export const addPatientHistory = async (
   problem,

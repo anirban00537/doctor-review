@@ -181,7 +181,14 @@ const addPhotoUrl = catchAsync(async (req: Request, res: Response) => {
     return errorResponse(res, String(error), null);
   }
 });
-
+const getAllUsers = catchAsync(async (req: Request, res: Response) => {
+  try {
+    const users = await userService.getAllUsers();
+    return successResponse(res, 'Users fetched successfully', users);
+  } catch (error) {
+    return errorResponse(res, String(error), null);
+  }
+});
 const getUserProfile = catchAsync(async (req: Request, res: Response) => {
   try {
     const token = separateToken(req.headers.authorization);
@@ -260,6 +267,19 @@ const getServiceById = catchAsync(async (req, res) => {
     return errorResponse(res, String(error), null);
   }
 });
+const deleteUserbyId = catchAsync(async (req, res) => {
+  try {
+    console.log(req.params.userId, 'req.params.userId');
+
+    const user = await userService.deleteUserById(Number(req.params.userId));
+    if (!user) {
+      return errorResponse(res, 'User not found', null);
+    }
+    return successResponse(res, 'User deleted successfully', user);
+  } catch (error) {
+    return errorResponse(res, String(error), null);
+  }
+});
 const updateUser = catchAsync(async (req, res) => {
   try {
     const user = await userService.updateUserById(req.params.userId, req.body);
@@ -288,5 +308,7 @@ export default {
   getUserMedicalHistory,
   getServiceById,
   addReview,
-  addPatientHistory
+  addPatientHistory,
+  getAllUsers,
+  deleteUserbyId
 };

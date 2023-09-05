@@ -47,7 +47,7 @@ const DoctorsList = () => {
               "url('/multicolor-shapes-black-backround_1297-161.jpg')",
             backgroundSize: "cover",
             backgroundPosition: "center",
-            height: 150,
+            height: 250,
           }}
         >
           <div>

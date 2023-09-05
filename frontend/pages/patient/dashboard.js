@@ -29,7 +29,7 @@ const Dashboard = () => {
             "url('/multicolor-shapes-black-backround_1297-161.jpg')", // Replace with your image path
           backgroundSize: "cover", // Adjust as needed
           backgroundPosition: "center", // Adjust as needed
-          height: 150,
+          height: 250,
         }}
       >
         <div>

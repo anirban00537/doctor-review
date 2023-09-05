@@ -275,6 +275,20 @@ const getUserByEmail = async <Key extends keyof User>(
     select: keys.reduce((obj, k) => ({ ...obj, [k]: true }), {})
   }) as Promise<Pick<User, Key> | null>;
 };
+const getAllUsers = async () => {
+  return await prisma.user.findMany({
+    select: {
+      id: true,
+      email: true,
+      name: true,
+      role: true,
+      isEmailVerified: true,
+      createdAt: true,
+      updatedAt: true,
+      doctorProfile: true
+    }
+  });
+};
 
 const updateUserById = async <Key extends keyof User>(
   userId: number,
@@ -306,7 +320,13 @@ const deleteUserById = async (userId: number): Promise<User> => {
   if (!user) {
     throw new ApiError(httpStatus.NOT_FOUND, 'User not found');
   }
+
+  // Delete related PatientHistory records
+  await prisma.patientHistory.deleteMany({ where: { userId: user.id } });
+
+  // Now, you can safely delete the user
   await prisma.user.delete({ where: { id: user.id } });
+
   return user;
 };
 const addReviewService = async (
@@ -338,5 +358,6 @@ export default {
   getServiceByIdService,
   addReviewService,
   createPatientHistory,
-  getMedicalHistory
+  getMedicalHistory,
+  getAllUsers
 };

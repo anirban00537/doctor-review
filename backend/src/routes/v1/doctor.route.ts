@@ -23,7 +23,7 @@ router.post(
   Doctors.editCreateDoctor
 );
 router.post('/service/search', validate(DoctorValidation.search), Doctors.search);
-router.delete('/service/:service_id', auth('doctor'), Doctors.delete_service);
+router.delete('/service/:service_id', Doctors.delete_service);
 
 router.post('/change-appointment-status', auth('doctor'), Doctors.changeAppointmentStatus);
 router.post(
