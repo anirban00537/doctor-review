@@ -16,7 +16,7 @@ export default function Home() {
             <div className="bg-green-600 p-8 md:p-12 lg:px-16 lg:py-24">
               <div className="mx-auto max-w-xl text-center">
                 <h2 className="text-2xl font-bold text-white md:text-3xl">
-                  Lorem, ipsum dolor sit amet consectetur adipisicing elit
+                  Doctor appointment review and ratings view
                 </h2>
                 <p className="hidden text-white/90 sm:mt-4 sm:block">
                   Lorem ipsum dolor sit amet, consectetur adipiscing elit. Et,
