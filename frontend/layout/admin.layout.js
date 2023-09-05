@@ -119,7 +119,7 @@ const AdminLayout = ({ children, name = "Dashboard" }) => {
                         >
                           {user?.user}
                         </div>
-                        <Link
+                        {/* <Link
                           href="/admin/profile"
                           className="block px-4 py-2 text-sm text-gray-700"
                           role="menuitem"
@@ -127,7 +127,7 @@ const AdminLayout = ({ children, name = "Dashboard" }) => {
                           id="user-menu-item-1"
                         >
                           Profile
-                        </Link>
+                        </Link> */}
                         <a
                           href="#"
                           className="block px-4 py-2 text-sm text-gray-700"
